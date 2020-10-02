@@ -47,14 +47,14 @@ public class ContactsFragment extends Fragment {
         //root = inflater.inflate(R.layout.fragment_contacts, container, false);
 
         db = new DatabaseHandler(container.getContext());
-        Log.e(TAG, "onCreateView: " + db.getGroceryCount() );
-        if(db.getGroceryCount() <= 0 ){
+        Log.e(TAG, "onCreateView: " + db.getMeetingCount() );
+        Log.e(TAG, "onCreateView: " + db.getContactCount() );
+        if(db.getContactCount() <= 0 ){
             root = inflater.inflate(R.layout.fragment_no_contacts, container, false);
         }else {
             root = inflater.inflate(R.layout.fragment_contacts, container, false);
 
             recyclerView = (RecyclerView) root.findViewById(R.id.recyclerViewID);
-            System.out.println();
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
 
@@ -76,11 +76,14 @@ public class ContactsFragment extends Fragment {
             recyclerViewAdapter = new ContactsRecyclerViewAdapter(container.getContext(), listItem);
             recyclerView.setAdapter(recyclerViewAdapter);
             recyclerViewAdapter.notifyDataSetChanged();
-
         }
 
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+    }
 }

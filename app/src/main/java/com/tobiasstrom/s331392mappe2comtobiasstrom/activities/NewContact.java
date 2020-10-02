@@ -1,10 +1,9 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +15,6 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import java.util.List;
 
 public class NewContact extends AppCompatActivity {
-    private Button btnClose;
     private Button btnSave;
     private List<Contact> contactsList;
     private List<Contact> listContact;
@@ -41,14 +39,7 @@ public class NewContact extends AppCompatActivity {
         editEmail = findViewById(R.id.editEmail);
         editPhoneNumber = findViewById(R.id.editPhoneNumber);
 
-        btnClose = findViewById(R.id.btnClose);
-        btnSave = findViewById(R.id.btnSave);
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        btnSave = findViewById(R.id.btnUpdate);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,4 +67,13 @@ public class NewContact extends AppCompatActivity {
         db.addContacts(contact);
 
     }
+    /*
+    private void restartActivity(){
+        Intent i = new Intent(getActivity(), PreferanseActivity.class);
+        startActivity(i);
+        getActivity().finish();
+    }
+
+     */
+
 }

@@ -2,6 +2,7 @@ package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 
@@ -37,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
             }
         });
         fabNewContact.setOnClickListener(new View.OnClickListener() {
@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
         fabNewMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "New Meeting", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(view.getContext(), NewMeeting.class));
                 fab.collapse();
             }
         });
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_contacts, R.id.nav_meetings)
+                R.id.nav_contacts, R.id.nav_meetings, R.id.nav_settings)
                 .setDrawerLayout(drawer)
                 .build();
 

@@ -32,12 +32,12 @@
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/fab"
-        android:layout_gravity="bottom|end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true">
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabNewContact"
@@ -45,8 +45,8 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_labelsPosition="left"
             fab:fab_icon="@drawable/add_contact"
+            fab:fab_labelsPosition="left"
             fab:fab_title="Label on the right" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton

@@ -1,14 +1,19 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.ui;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.tobiasstrom.s331392mappe2comtobiasstrom.activities.ContactDetailsActivity;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 
@@ -50,11 +55,13 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         return contactItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         final TextView tvTxtFirstName;
         final TextView tvTxtLastName;
         final TextView tvTxtEmail;
         final TextView tvTxtPhone;
+        public ImageButton btnDelete;
+
         public int id;
 
         public ViewHolder(@NonNull View v, Context ctx) {
@@ -64,8 +71,55 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
             this.tvTxtLastName = v.findViewById(R.id.tvTxtLastName);
             this.tvTxtEmail = v.findViewById(R.id.tvTxtEmail);
             this.tvTxtPhone = v.findViewById(R.id.tvTxtPhone);
+            this.btnDelete = v.findViewById(R.id.btnDelete);
+            btnDelete.setOnClickListener(this);
+
+            v.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Log.e(TAG, "onLongClick: Finker detter");
+                    return false;
+                }
+            });
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+
+                    Contact contact = contactItems.get(position);
+                    Intent intent = new Intent(context, ContactDetailsActivity.class);
+                    intent.putExtra("firstname", contact.getFirstName());
+                    intent.putExtra("lastname", contact.getLastName());
+                    Log.e(TAG, "onClick: " + contact.getLastName() );
+                    intent.putExtra("phone", contact.getPhoneNumber());
+                    intent.putExtra("email", contact.getEmail());
+                    context.startActivity(intent);
+                }
+            });
+
+        }
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btnDelete:
+
+                    int position = getAdapterPosition();
+                    Contact contact = contactItems.get(position);
+                    DatabaseHandler db = new DatabaseHandler(context);
+                    //delete item
+                    db.deleteContact(contact.getContactId());
+                    contactItems.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
+                    break;
+            }
+        }
+
+        public void onLongClick(View v){
 
         }
 
     }
+
+
 }

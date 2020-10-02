@@ -6,71 +6,50 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/white_pressed"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@color/white_pressed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/btnDelete"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_delete" />
-
         <TextView
-            android:id="@+id/tvTxtPhone"
+            android:id="@+id/tvTxtDate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="19dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tvTxtEmail"
-            app:layout_constraintTop_toBottomOf="@+id/tvTxtEmail"
-            tools:text="95163394" />
+            app:layout_constraintStart_toStartOf="@+id/tvTxtMetingName"
+            app:layout_constraintTop_toBottomOf="@+id/tvTxtMetingName"
+            tools:text="24/09" />
 
         <TextView
-            android:id="@+id/tvTxtEmail"
+            android:id="@+id/tvTxtTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
             android:text="TextView"
-            app:layout_constraintStart_toStartOf="@+id/tvTxtFirstName"
-            app:layout_constraintTop_toBottomOf="@+id/tvTxtFirstName"
-            tools:text="tobias@tobiasstrom.com" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvTxtDate"
+            app:layout_constraintStart_toEndOf="@+id/tvTxtDate"
+            tools:text="15:15" />
 
         <TextView
-            android:id="@+id/tvTxtFirstName"
+            android:id="@+id/tvTxtMetingName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Tobias" />
+            tools:text="Jobb møte" />
 
-        <TextView
-            android:id="@+id/tvTxtLastName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="TextView"
-            android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tvTxtFirstName"
-            app:layout_constraintStart_toEndOf="@+id/tvTxtFirstName"
-            tools:text="Strøm" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
