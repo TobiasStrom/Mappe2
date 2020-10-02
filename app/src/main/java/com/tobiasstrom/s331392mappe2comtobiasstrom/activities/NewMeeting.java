@@ -18,6 +18,7 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class NewMeeting extends AppCompatActivity {
@@ -76,8 +77,9 @@ public class NewMeeting extends AppCompatActivity {
                 calendar.set(Calendar.HOUR_OF_DAY, i);
                 calendar.set(Calendar.MINUTE, i1);
                 Log.e(TAG, "onTimeSet: " + calendar.toString());
+                Date date = new Date();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-                String formatedTime = simpleDateFormat.format(calendar);
+                String formatedTime = simpleDateFormat.format(calendar.getTime());
                 txtTimeStart.setText(formatedTime);
             }
         };
@@ -99,7 +101,7 @@ public class NewMeeting extends AppCompatActivity {
                 calendar.set(Calendar.DAY_OF_MONTH, i2);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 Log.e(TAG, "onDateSet: " + calendar.toString() );
-                String formaterDate = simpleDateFormat.format(calendar);
+                String formaterDate = simpleDateFormat.format(calendar.getTime());
                 Log.e(TAG, "onDateSet: " + formaterDate);
                 txtDateStart.setText(formaterDate);
             }

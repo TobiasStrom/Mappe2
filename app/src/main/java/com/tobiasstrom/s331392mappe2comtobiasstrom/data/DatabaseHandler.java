@@ -244,9 +244,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<Contact> getContactNotInMeeting(int meetingID){
         SQLiteDatabase db = this.getReadableDatabase();
         List<Contact> contactsList = new ArrayList<>();
-        String findPersonInMeeting = "SELECT *" +
+        /*String findPersonInMeeting = "SELECT *" +
                 " FROM "+ Constants.TABLE_CONTACT + " CROSS JOIN " + Constants.TABLE_COMBO + " ON "+ Constants.TABLE_CONTACT+"."+ Constants.KEY_CONTACT_ID + " = "+ Constants.TABLE_COMBO + "." + Constants.KEY_CONTACTTBL_ID +
-                " WHERE "+ Constants.TABLE_COMBO+ "."+ Constants.KEY_MEETINGTBL_ID + " = " + meetingID + ";";
+                " WHERE "+ Constants.TABLE_COMBO+ "."+ Constants.KEY_MEETINGTBL_ID + " = " + meetingID + ";";*/
+
+        //select * from customerTBL left join comboTBL on customerTBL.id = comboTBL.customerTBL_id where comboTBL.meetingTBL_ID != 1 or comboTBL.meetingTBL_ID is null;
+        String findPersonInMeeting = "SELECT * FROM "+Constants.TABLE_CONTACT +
+                " LEFT JOIN "+Constants.TABLE_COMBO+" ON "+Constants.TABLE_CONTACT+"."+Constants.KEY_CONTACT_ID+" = "+Constants.TABLE_COMBO+"."+Constants.KEY_CONTACTTBL_ID+
+                " WHERE "+Constants.TABLE_COMBO+"."+Constants.KEY_MEETINGTBL_ID+" != "+meetingID+" OR "+Constants.TABLE_COMBO+"."+Constants.KEY_MEETINGTBL_ID+" IS NULL ;";
 
         Cursor cursor = db.rawQuery(findPersonInMeeting, null);
         if(cursor.moveToFirst()){
