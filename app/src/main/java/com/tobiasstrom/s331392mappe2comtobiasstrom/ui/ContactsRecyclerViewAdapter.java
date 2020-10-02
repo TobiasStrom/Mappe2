@@ -1,6 +1,9 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.ui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tobiasstrom.s331392mappe2comtobiasstrom.activities.ContactDetailsActivity;
@@ -65,7 +69,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
         public int id;
 
-        public ViewHolder(@NonNull View v, Context ctx) {
+        public ViewHolder(@NonNull final View v, Context ctx) {
             super(v);
             context = ctx;
             this.tvTxtFirstName = v.findViewById(R.id.tvTxtFirstName);
@@ -98,13 +102,33 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
             pane.setOnLongClickListener(new View.OnLongClickListener() {
 
                 public boolean onLongClick(View view) {
-                    int position = getAdapterPosition();
-                    Contact contact = contactItems.get(position);
-                    DatabaseHandler db = new DatabaseHandler(context);
-                    //delete item
-                    db.deleteContact(contact.getContactId());
-                    contactItems.remove(getAdapterPosition());
-                    notifyItemRemoved(getAdapterPosition());
+                    //vis dialog om brukeren vil virkelig slette denne kontakten
+                    final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+                    alertDialogBuilder.setTitle("Delete Contacts");
+                    alertDialogBuilder.setMessage("Do you want to delete this contact?");
+                    alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //Dersom brukeren ønsker seg å slette denne kontaktet
+                            int position = getAdapterPosition();
+                            Contact contact = contactItems.get(position);
+                            DatabaseHandler db = new DatabaseHandler(context);
+                            //delete item
+                            db.deleteContact(contact.getContactId());
+                            contactItems.remove(getAdapterPosition());
+                            notifyItemRemoved(getAdapterPosition());
+                        }
+                    });
+                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //dersom brukeren ønsker seg ikke å slette denne kontakten
+                            //do nothing
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
                     return true;
                 }
 
