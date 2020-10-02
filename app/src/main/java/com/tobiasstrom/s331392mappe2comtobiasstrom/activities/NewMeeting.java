@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -58,16 +60,19 @@ public class NewMeeting extends AppCompatActivity {
     private String newMeetingEndTime;
     private String newMeetingType;
     private String newMeetingPlace;
+    private ArrayList<Integer> selectedItems;
+    private String[] participants;
 
 
     View root;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_meeting);
 
         db = new DatabaseHandler(this);
+
 
         txtDateStart = (TextView) findViewById(R.id.txtDateStart);
         txtTimeStart = (TextView) findViewById(R.id.txtTimeStart);
@@ -89,6 +94,9 @@ public class NewMeeting extends AppCompatActivity {
             txtInputType.setText(newMeetingType);
 
         }else {
+            //id kommer å være nødvendig dersom man vil liste personer for en ny meeting
+            //og da burde alle kontakter listes opp
+            id = db.getMeetingCount()+1;
             Date date= new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
@@ -104,6 +112,18 @@ public class NewMeeting extends AppCompatActivity {
             time = timeFormat.format(calendar.getTime());
             txtTimeEnd.setText(time);
         }
+
+        //her skal egentlig hentes alle de som ikke er i meeting med metoden getAllNotInMeeting har noe feil inn i seg
+        // Den bruker opp hele minnen til emulatoren og dreper den
+        List<Contact> contacts = db.getAllContacts();
+        participants = new String[contacts.size()];
+
+        //hente kun navn fra contact liste dersom dialogen kan kun vise string array
+        //her senere kan man gjøre slik at man appender navn og etternavn til en string
+        for (int i = 0; i < participants.length; i++) {
+            participants[i] = contacts.get(i).getFirstName();
+        }
+
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +162,12 @@ public class NewMeeting extends AppCompatActivity {
         btnAddParticipant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopup();
+
+
+                //showPopup();
+                //skaper dialog ved hjelp av onCreateDialog metode
+                Dialog dialog = onCreateDialog(savedInstanceState);
+                dialog.show();
             }
         });
 
@@ -239,6 +264,48 @@ public class NewMeeting extends AppCompatActivity {
         //viser dialogboken.
         myDialog.show();
     }
+
+    //noe som har blitt hentet fra android.com
+    //https://developer.android.com/guide/topics/ui/dialogs#java
+    //dette skaper en dialog med en multichoice list og lagrer valgte elementer til selectedItems arrayList<Integer>
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        selectedItems = new ArrayList();  // Where we track the selected items
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // Set the dialog title
+        builder.setTitle("Choose participants")
+                // Specify the list array, the items to be selected by default (null for none),
+                // and the listener through which to receive callbacks when items are selected
+                .setMultiChoiceItems(participants, null,
+                        new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which,
+                                                boolean isChecked) {
+                                if (isChecked) {
+                                    // If the user checked the item, add it to the selected items
+                                    selectedItems.add(which);
+                                } else if (selectedItems.contains(which)) {
+                                    // Else, if the item is already in the array, remove it
+                                    selectedItems.remove(Integer.valueOf(which));
+                                }
+                            }
+                        })
+                // Set the action buttons
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK, so save the selectedItems results somewhere
+                        // or return them to the component that opened the dialog
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+
+        return builder.create();
+    }
+
 
 
 }
