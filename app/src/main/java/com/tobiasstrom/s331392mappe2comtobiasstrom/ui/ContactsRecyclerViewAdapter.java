@@ -117,6 +117,8 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
                             db.deleteContact(contact.getContactId());
                             contactItems.remove(getAdapterPosition());
                             notifyItemRemoved(getAdapterPosition());
+
+                            // TODO: 02.10.2020 her skal man også slette verdier knyttet til denne kontakten i komboTBL
                         }
                     });
                     alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {

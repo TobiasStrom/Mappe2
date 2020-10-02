@@ -1,5 +1,6 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.data;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -177,12 +178,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return ant;
     }
+
     public void deleteMeeting(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(Constants.TABLE_MEETING, Constants.KEY_MEETING_ID + " =? ", new String[]{String.valueOf(id)});
         db.close();
 
     }
+
     public void addMeeting(Meeting meeting){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -227,23 +230,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(findPersonInMeeting, null);
         if(cursor.moveToFirst()){
             do {
-
                 Contact contact = new Contact();
                 contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_ID))));
                 contact.setFirstName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_FIRSTNAME)));
                 contact.setLastName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_LASTNAME)));
                 contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_PHONENUMBER)));
                 contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));
-                contactsList.add(contact);
 
-            }while (cursor.moveToFirst());
+
+            }while (cursor.moveToNext());
         }
+        cursor.close();
         return contactsList;
         //select customerTBL.customer_firsname from customerTBl cross join comboTBL on customerTBL.id = comboTBL.customerTBl_id  where comboTBL.meetingTBL_id =1;
     }
+
     public List<Contact> getContactNotInMeeting(int meetingID){
         SQLiteDatabase db = this.getReadableDatabase();
         List<Contact> contactsList = new ArrayList<>();
+        String[] colummns = {Constants.KEY_CONTACT_ID,Constants.KEY_CONTACT_FIRSTNAME,Constants.KEY_CONTACT_LASTNAME,Constants.KEY_CONTACT_PHONENUMBER,Constants.KEY_CONTACT_EMAIL};
         /*String findPersonInMeeting = "SELECT *" +
                 " FROM "+ Constants.TABLE_CONTACT + " CROSS JOIN " + Constants.TABLE_COMBO + " ON "+ Constants.TABLE_CONTACT+"."+ Constants.KEY_CONTACT_ID + " = "+ Constants.TABLE_COMBO + "." + Constants.KEY_CONTACTTBL_ID +
                 " WHERE "+ Constants.TABLE_COMBO+ "."+ Constants.KEY_MEETINGTBL_ID + " = " + meetingID + ";";*/
@@ -254,17 +259,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 " WHERE "+Constants.TABLE_COMBO+"."+Constants.KEY_MEETINGTBL_ID+" != "+meetingID+" OR "+Constants.TABLE_COMBO+"."+Constants.KEY_MEETINGTBL_ID+" IS NULL ;";
 
         Cursor cursor = db.rawQuery(findPersonInMeeting, null);
+
         if(cursor.moveToFirst()){
             do {
                 Contact contact = new Contact();
-                contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_ID))));
+                contact.setContactId(cursor.getInt(0));
+                contact.setFirstName(cursor.getString(1));
+                contact.setLastName(cursor.getString(2));
+                contact.setPhoneNumber(cursor.getString(3));
+                contact.setEmail(cursor.getString(4));
+                contactsList.add(contact);
+                /*contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_ID))));
                 contact.setFirstName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_FIRSTNAME)));
                 contact.setLastName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_LASTNAME)));
                 contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_PHONENUMBER)));
-                contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));
-                contactsList.add(contact);
-            }while (cursor.moveToFirst());
+                contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));*/
+            }while (cursor.moveToNext());
         }
+        cursor.close();
         return contactsList;
         //select customerTBL.customer_firsname from customerTBl cross join comboTBL on customerTBL.id = comboTBL.customerTBl_id  where comboTBL.meetingTBL_id =1;
     }

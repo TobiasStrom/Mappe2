@@ -89,14 +89,12 @@ public class NewMeeting extends AppCompatActivity {
             newMeetingEnd = bundle.getString("meeting_end");
             newMeetingPlace = bundle.getString("meeting_place");
             newMeetingType = bundle.getString("meeting_type");
-            id = Integer.parseInt(bundle.getString("meeting_id"));
+            id = Integer.parseInt(bundle.getString("meeting_id")); // TODO: 02.10.2020 her viser seg til å at en feil id passeres
             txtInputPlace.setText(newMeetingPlace);
             txtInputType.setText(newMeetingType);
 
         }else {
-            //id kommer å være nødvendig dersom man vil liste personer for en ny meeting
-            //og da burde alle kontakter listes opp
-            id = db.getMeetingCount()+1;
+            id = db.getMeetingCount()+1; //skapes en id som skal være det samme som sql vil lage
             Date date= new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
@@ -115,7 +113,7 @@ public class NewMeeting extends AppCompatActivity {
 
         //her skal egentlig hentes alle de som ikke er i meeting med metoden getAllNotInMeeting har noe feil inn i seg
         // Den bruker opp hele minnen til emulatoren og dreper den
-        List<Contact> contacts = db.getAllContacts();
+        List<Contact> contacts = db.getContactNotInMeeting(id);
         participants = new String[contacts.size()];
 
         //hente kun navn fra contact liste dersom dialogen kan kun vise string array
