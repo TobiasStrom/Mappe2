@@ -61,6 +61,7 @@ public class MeetingsFragment extends Fragment {
 
             for(Meeting m : meetingList){
                 Meeting meeting = new Meeting();
+                meeting.setMetingId(m.getMetingId());
                 meeting.setMeeting_start(m.getMeeting_start());
                 meeting.setMeeting_end(m.getMeeting_end());
                 meeting.setMeeting_type(m.getMeeting_type());

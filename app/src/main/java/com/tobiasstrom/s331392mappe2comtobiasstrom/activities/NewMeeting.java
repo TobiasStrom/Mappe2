@@ -73,7 +73,6 @@ public class NewMeeting extends AppCompatActivity {
 
         db = new DatabaseHandler(this);
 
-
         txtDateStart = (TextView) findViewById(R.id.txtDateStart);
         txtTimeStart = (TextView) findViewById(R.id.txtTimeStart);
         txtDateEnd = (TextView) findViewById(R.id.txtDateEnd);
@@ -81,6 +80,7 @@ public class NewMeeting extends AppCompatActivity {
         txtInputPlace = (EditText) findViewById(R.id.txtInputPlace);
         txtInputType = (EditText) findViewById(R.id.txtIputType);
         btnAddParticipant = (Button) findViewById(R.id.btnAddParticipant);
+        Log.d(TAG, "onCreate: before bunde check");
 
         btnSave = (Button) findViewById(R.id.btnSaveMeeting);
         Bundle bundle = getIntent().getExtras();
@@ -90,6 +90,7 @@ public class NewMeeting extends AppCompatActivity {
             newMeetingPlace = bundle.getString("meeting_place");
             newMeetingType = bundle.getString("meeting_type");
             id = Integer.parseInt(bundle.getString("meeting_id")); // TODO: 02.10.2020 her viser seg til å at en feil id passeres
+            Log.d(TAG, "onCreate: id for meeting"+id);
             txtInputPlace.setText(newMeetingPlace);
             txtInputType.setText(newMeetingType);
 

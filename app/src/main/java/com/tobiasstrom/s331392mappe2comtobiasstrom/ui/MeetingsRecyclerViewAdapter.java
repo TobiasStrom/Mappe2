@@ -79,7 +79,7 @@ public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRe
 
                     Meeting meeting = meetingItem.get(position);
                     Intent intent = new Intent(context, NewMeeting.class);
-                    Log.e(TAG, "onClick: " + meeting.getMetingId() );
+                    Log.e(TAG, "onClick: boi" + meeting.getMetingId() );
                     intent.putExtra("meeting_id", String.valueOf(meeting.getMetingId()));
                     intent.putExtra("meeting_start", meeting.getMeeting_start());
                     intent.putExtra("meeting_end", meeting.getMeeting_end());
