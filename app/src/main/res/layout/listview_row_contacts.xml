@@ -46,12 +46,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="TextView"
-            app:layout_constraintStart_toStartOf="@+id/tvTxtFirstName"
-            app:layout_constraintTop_toBottomOf="@+id/tvTxtFirstName"
+            app:layout_constraintStart_toStartOf="@+id/tvTxtFirstNameMeeting"
+            app:layout_constraintTop_toBottomOf="@+id/tvTxtFirstNameMeeting"
             tools:text="tobias@tobiasstrom.com" />
 
         <TextView
-            android:id="@+id/tvTxtFirstName"
+            android:id="@+id/tvTxtFirstNameMeeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -63,14 +63,14 @@
             tools:text="Tobias" />
 
         <TextView
-            android:id="@+id/tvTxtLastName"
+            android:id="@+id/tvTxtLastNameMeeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="TextView"
             android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tvTxtFirstName"
-            app:layout_constraintStart_toEndOf="@+id/tvTxtFirstName"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvTxtFirstNameMeeting"
+            app:layout_constraintStart_toEndOf="@+id/tvTxtFirstNameMeeting"
             tools:text="Strøm" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
