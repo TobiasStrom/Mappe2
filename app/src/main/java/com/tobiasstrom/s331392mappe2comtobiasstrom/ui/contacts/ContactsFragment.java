@@ -86,11 +86,19 @@ public class ContactsFragment extends Fragment {
     @Override
     public void onResume() {
         //oppdaterer kontakter inn i kontakt fragmentet etter at en ny kontakt har blitt oprettet
-        List<Contact> list = db.getAllContacts();
+        //det er mulig å forbedre det, det er ikke nødvendig å loope gjennom hele listen på nytt dersom kun en element har blitt lagt til
+        /*List<Contact> list = db.getAllContacts();//henter listen fra databasen som er oppdatert
+        listItem.clear();//nullstiller listen med kontakter som vises
+        for (Contact c : list) { //legger på nytt alle verdier
+            Contact contact = new Contact();
+            contact.setFirstName(c.getFirstName());
+            contact.setLastName(c.getLastName());
+            contact.setContactId(c.getContactId());
+            contact.setEmail(c.getEmail());
+            contact.setPhoneNumber(c.getPhoneNumber());
 
-        if (list.size() != contactList.size()) { //hvis det er flere kontakter inn i databasen enn i fragmentet
-            listItem.add(list.get(list.size()-1)); //legg den siste kontakten til kontakt listen på fragmentet
-        }
+            listItem.add(contact);
+        }*/
         super.onResume();
 
     }

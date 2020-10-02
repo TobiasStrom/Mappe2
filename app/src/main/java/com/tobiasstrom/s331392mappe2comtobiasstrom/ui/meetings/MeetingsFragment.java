@@ -78,4 +78,16 @@ public class MeetingsFragment extends Fragment {
 
         return root;
     }
+
+    @Override
+    public void onResume() {
+        //oppdaterer meetinger inn i meeting fragmentet etter at en ny meeting har blitt oprettet
+        /*List<Meeting> list = db.getAllMeetings();
+
+        if (list.size() != meetingList.size()) { //hvis det er flere meetings inn i databasen enn i fragmentet
+            meetingItem.add(list.get(list.size()-1)); //legg den siste meetingen til meeting listen på fragmentet
+        }*/
+        super.onResume();
+
+    }
 }
