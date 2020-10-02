@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 
+
 public class NewMeeting extends AppCompatActivity {
 
     private DatabaseHandler db;
@@ -157,9 +158,10 @@ public class NewMeeting extends AppCompatActivity {
                 calendar.set(Calendar.HOUR_OF_DAY, i);
                 calendar.set(Calendar.MINUTE, i1);
                 Log.e(TAG, "onTimeSet: " + calendar.toString());
+                Date date = new Date();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
                 String formatedTime = simpleDateFormat.format(calendar.getTime());
-                txtTimeStarts.setText(formatedTime);
+                txtTimeStart.setText(formatedTime);
             }
         };
         new TimePickerDialog(NewMeeting.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
