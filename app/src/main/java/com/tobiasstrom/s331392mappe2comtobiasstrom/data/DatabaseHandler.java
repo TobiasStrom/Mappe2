@@ -151,12 +151,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 Meeting meeting = new Meeting();
                 String date = cursor.getString(cursor.getColumnIndex(Constants.KEY_MEETING_START));
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM:SS", Locale.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:MM:SS", Locale.getDefault());
                 meeting.setMetingId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_MEETING_ID))));
                 meeting.setMeeting_start(cursor.getString(cursor.getColumnIndex(Constants.KEY_MEETING_START)));
-                meeting.setMeeting_date(cursor.getString(cursor.getColumnIndex(Constants.KEY_MEETING_END)));
+                meeting.setMeeting_end(cursor.getString(cursor.getColumnIndex(Constants.KEY_MEETING_END)));
                 meeting.setMeeting_place(cursor.getString(cursor.getColumnIndex(Constants.KEY_MEETING_PLACE)));
-                meeting.setMeeting_place(cursor.getString(cursor.getColumnIndex(Constants.KEY_MEETING_TYPE)));
+                meeting.setMeeting_type(cursor.getString(cursor.getColumnIndex(Constants.KEY_MEETING_TYPE)));
 
                 meetingList.add(meeting);
             }while (cursor.moveToNext());
@@ -188,7 +188,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(Constants.KEY_MEETING_START, meeting.getMeeting_start());
-        values.put(Constants.KEY_MEETING_END, meeting.getMeeting_date());
+        values.put(Constants.KEY_MEETING_END, meeting.getMeeting_end());
         values.put(Constants.KEY_MEETING_PLACE, meeting.getMeeting_place());
         values.put(Constants.KEY_MEETING_TYPE, meeting.getMeeting_type());
 
@@ -256,7 +256,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(findPersonInMeeting, null);
         if(cursor.moveToFirst()){
             do {
-
                 Contact contact = new Contact();
                 contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_ID))));
                 contact.setFirstName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_FIRSTNAME)));
@@ -264,7 +263,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_PHONENUMBER)));
                 contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));
                 contactsList.add(contact);
-
             }while (cursor.moveToFirst());
         }
         return contactsList;

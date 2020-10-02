@@ -47,8 +47,8 @@ public class ContactsFragment extends Fragment {
         //root = inflater.inflate(R.layout.fragment_contacts, container, false);
 
         db = new DatabaseHandler(container.getContext());
-        Log.e(TAG, "onCreateView: " + db.getMeetingCount() );
-        Log.e(TAG, "onCreateView: " + db.getContactCount() );
+        Log.e(TAG, "onCreateView: Meetings " + db.getMeetingCount() );
+        Log.e(TAG, "onCreateView: Contact " + db.getContactCount() );
         if(db.getContactCount() <= 0 ){
             root = inflater.inflate(R.layout.fragment_no_contacts, container, false);
         }else {

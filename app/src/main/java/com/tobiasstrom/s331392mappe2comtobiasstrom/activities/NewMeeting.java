@@ -1,9 +1,11 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,19 +13,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Meeting;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsInMeetingRecyclerViewAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
 
 
 public class NewMeeting extends AppCompatActivity {
 
+    private DatabaseHandler db;
+
     private static final String TAG = "NewMeeting";
+
+    private Dialog myDialog;
     private TextView txtDateStart;
     private TextView txtTimeStart;
     private TextView txtDateEnd;
@@ -31,12 +45,29 @@ public class NewMeeting extends AppCompatActivity {
     private EditText txtInputPlace;
     private EditText txtInputType;
     private Button btnAddParticipant;
-    private RecyclerView tvParticipant;
+    private Button btnSave;
+    private ListView tvParticipant;
+    private List<Contact> contactList;
+    private List<Contact> listItem;
+    private int id;
+    private String newMeetingStart;
+    private String newMeetingEnd;
+    private String newMeetingStartDate;
+    private String newMeetingStartTime;
+    private String newMeetingEndDate;
+    private String newMeetingEndTime;
+    private String newMeetingType;
+    private String newMeetingPlace;
+
+
+    View root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_meeting);
+
+        db = new DatabaseHandler(this);
 
         txtDateStart = (TextView) findViewById(R.id.txtDateStart);
         txtTimeStart = (TextView) findViewById(R.id.txtTimeStart);
@@ -45,9 +76,45 @@ public class NewMeeting extends AppCompatActivity {
         txtInputPlace = (EditText) findViewById(R.id.txtInputPlace);
         txtInputType = (EditText) findViewById(R.id.txtIputType);
         btnAddParticipant = (Button) findViewById(R.id.btnAddParticipant);
-        tvParticipant = (RecyclerView) findViewById(R.id.tvParticipant);
+
+        btnSave = (Button) findViewById(R.id.btnSaveMeeting);
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            newMeetingStart = bundle.getString("meeting_start");
+            newMeetingEnd = bundle.getString("meeting_end");
+            newMeetingPlace = bundle.getString("meeting_place");
+            newMeetingType = bundle.getString("meeting_type");
+            id = Integer.parseInt(bundle.getString("meeting_id"));
+            txtInputPlace.setText(newMeetingPlace);
+            txtInputType.setText(newMeetingType);
+
+        }else {
+            Date date= new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:MM");
+            String dateDate = dateFormat.format(calendar.getTime());
+            txtDateStart.setText(dateDate);
+            txtDateEnd.setText(dateDate);
+            String time = timeFormat.format(calendar.getTime());
+            Log.e(TAG, "onCreate: " + time );
+            txtTimeStart.setText(time);
+            calendar.add(Calendar.MINUTE, 30);
+            time = timeFormat.format(calendar.getTime());
+            txtTimeEnd.setText(time);
+        }
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveMeetingToDB(view);
+            }
+        });
 
         txtDateStart.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View view) {
                 showDateDialog(txtDateStart);
@@ -57,7 +124,7 @@ public class NewMeeting extends AppCompatActivity {
         txtDateEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDateDialog(txtDateStart);
+                showDateDialog(txtDateEnd);
             }
         });
         txtTimeStart.setOnClickListener(new View.OnClickListener() {
@@ -66,9 +133,23 @@ public class NewMeeting extends AppCompatActivity {
                 showTimeDalog(txtTimeStart);
             }
         });
+        txtTimeEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTimeDalog(txtTimeEnd);
+            }
+        });
+        btnAddParticipant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopup();
+            }
+        });
+
+
     }
 
-    private void showTimeDalog(final TextView txtTimeStart) {
+    private void showTimeDalog(final TextView txtTimeStarts) {
         final Calendar calendar = Calendar.getInstance();
 
         TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -86,10 +167,10 @@ public class NewMeeting extends AppCompatActivity {
         new TimePickerDialog(NewMeeting.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
     }
 
-    private void showDateDialog (final TextView txtDateStart) {
+    private void showDateDialog (final TextView txtDateStarts) {
         final Calendar calendar = Calendar.getInstance();
         Calendar calendarr = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         Log.e(TAG, "showDateDialog: " + simpleDateFormat.format(calendar.getTime()));
         Log.e(TAG, "showDateDialog: " + calendar.getTime() );
@@ -99,14 +180,64 @@ public class NewMeeting extends AppCompatActivity {
                 calendar.set(Calendar.YEAR, i);
                 calendar.set(Calendar.MONTH, i1);
                 calendar.set(Calendar.DAY_OF_MONTH, i2);
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 Log.e(TAG, "onDateSet: " + calendar.toString() );
                 String formaterDate = simpleDateFormat.format(calendar.getTime());
                 Log.e(TAG, "onDateSet: " + formaterDate);
-                txtDateStart.setText(formaterDate);
+                txtDateStarts.setText(formaterDate);
             }
         };
         new DatePickerDialog(NewMeeting.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void saveMeetingToDB(View v){
+        Meeting meeting = new Meeting();
+
+        String newStartDateTime = txtDateStart.getText().toString() + " " + txtTimeStart.getText().toString();
+        String newEndDateTime = txtDateEnd.getText().toString() + " " + txtTimeEnd.getText().toString();
+        String newPlace = txtInputPlace.getText().toString();
+        String newType = txtInputType.getText().toString();
+
+        meeting.setMeeting_start(newStartDateTime);
+        meeting.setMeeting_end(newEndDateTime);
+        meeting.setMeeting_place(newPlace);
+        meeting.setMeeting_type(newType);
+
+        db.addMeeting(meeting);
+
+
+    }
+    public void showPopup(){
+        //Oppretter en dialogbox og setter verdien til den custom_pop_up boks
+        myDialog = new Dialog(this);
+        myDialog.setContentView(R.layout.custon_pop_add_contact);
+        //Henter ut informasjonen av det som er i popupen
+        tvParticipant = (ListView) myDialog.findViewById(R.id.tvParticipant);
+        //Oppretter en StatestikAdaper for å hvise listen på den måten jeg ønsker
+
+        //Oppretter listen med en bestemt adapter
+
+        contactList = new ArrayList<>();
+        listItem = new ArrayList<>();
+        contactList = db.getAllContacts();
+        Log.e(TAG, "showPopup: " + contactList.size() );
+        for (Contact c : contactList) {
+            Contact contact = new Contact();
+            contact.setFirstName(c.getFirstName());
+            contact.setLastName(c.getLastName());
+            contact.setContactId(c.getContactId());
+            contact.setEmail(c.getEmail());
+            contact.setPhoneNumber(c.getPhoneNumber());
+
+            listItem.add(contact);
+        }
+        ContactsInMeetingRecyclerViewAdapter cinrva = new ContactsInMeetingRecyclerViewAdapter(this, R.layout.listview_row_contacts_in_meeting, listItem);
+
+        tvParticipant.setAdapter(cinrva);
+
+
+        //viser dialogboken.
+        myDialog.show();
     }
 
 

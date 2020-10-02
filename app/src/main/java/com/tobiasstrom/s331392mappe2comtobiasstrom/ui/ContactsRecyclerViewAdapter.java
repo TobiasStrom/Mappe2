@@ -67,8 +67,8 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         public ViewHolder(@NonNull View v, Context ctx) {
             super(v);
             context = ctx;
-            this.tvTxtFirstName = v.findViewById(R.id.tvTxtFirstName);
-            this.tvTxtLastName = v.findViewById(R.id.tvTxtLastName);
+            this.tvTxtFirstName = v.findViewById(R.id.tvTxtFirstNameMeeting);
+            this.tvTxtLastName = v.findViewById(R.id.tvTxtLastNameMeeting);
             this.tvTxtEmail = v.findViewById(R.id.tvTxtEmail);
             this.tvTxtPhone = v.findViewById(R.id.tvTxtPhone);
             this.btnDelete = v.findViewById(R.id.btnDelete);
@@ -91,7 +91,6 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
                     Intent intent = new Intent(context, ContactDetailsActivity.class);
                     intent.putExtra("firstname", contact.getFirstName());
                     intent.putExtra("lastname", contact.getLastName());
-                    Log.e(TAG, "onClick: " + contact.getLastName() );
                     intent.putExtra("phone", contact.getPhoneNumber());
                     intent.putExtra("email", contact.getEmail());
                     context.startActivity(intent);
