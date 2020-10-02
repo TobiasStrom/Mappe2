@@ -91,7 +91,6 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
                     Intent intent = new Intent(context, ContactDetailsActivity.class);
                     intent.putExtra("firstname", contact.getFirstName());
                     intent.putExtra("lastname", contact.getLastName());
-                    Log.e(TAG, "onClick: " + contact.getLastName() );
                     intent.putExtra("phone", contact.getPhoneNumber());
                     intent.putExtra("email", contact.getEmail());
                     context.startActivity(intent);

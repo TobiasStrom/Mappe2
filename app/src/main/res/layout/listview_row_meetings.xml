@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="100dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="395dp"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -17,18 +17,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tvTxtDate"
-            android:layout_width="wrap_content"
-            android:layout_height="19dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tvTxtMetingName"
-            app:layout_constraintTop_toBottomOf="@+id/tvTxtMetingName"
-            tools:text="24/09" />
 
         <TextView
             android:id="@+id/tvTxtTime"
@@ -41,15 +29,35 @@
             tools:text="15:15" />
 
         <TextView
-            android:id="@+id/tvTxtMetingName"
+            android:id="@+id/tvTxtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintTop_toBottomOf="@+id/tvTxtMetingType"
+            tools:layout_editor_absoluteX="114dp"
+            tools:text="24/09" />
+
+        <TextView
+            android:id="@+id/tvTxtMetingType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Jobb møte" />
+
+        <TextView
+            android:id="@+id/tvTxtMetingPlace"
+            android:layout_width="36dp"
+            android:layout_height="7dp"
+            android:layout_marginStart="8dp"
+            android:text="TextView"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/tvTxtMetingType"
+            tools:text="Noe Tekst" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

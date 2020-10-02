@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,10 +12,30 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Meeting;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsRecyclerViewAdapter;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.MeetingsRecyclerViewAdapter;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.contacts.ContactsViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MeetingsFragment extends Fragment {
+
+    private ContactsViewModel contactsViewModel;
+    private RecyclerView recyclerView;
+    private MeetingsRecyclerViewAdapter recyclerViewAdapter;
+    private ListView lvContacts;
+    private List<Meeting> meetingList;
+    private List<Meeting> meetingItem;
+    private DatabaseHandler db;
+    View root;
 
     private MeetingsViewModel meetingsViewModel;
 
@@ -22,14 +43,39 @@ public class MeetingsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         meetingsViewModel =
                 ViewModelProviders.of(this).get(MeetingsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_meetings, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
-        meetingsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+
+        db = new DatabaseHandler(container.getContext());
+
+        if (db.getMeetingCount() <= 0 ){
+            root = inflater.inflate(R.layout.fragment_no_meetings, container, false);
+        }else{
+            root = inflater.inflate(R.layout.fragment_meetings, container, false);
+
+            recyclerView = (RecyclerView) root.findViewById(R.id.recyclerViewMeetingID);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+
+            meetingList = new ArrayList<>();
+            meetingItem = new ArrayList<>();
+            meetingList = db.getAllMeetings();
+
+            for(Meeting m : meetingList){
+                Meeting meeting = new Meeting();
+                meeting.setMeeting_start(m.getMeeting_start());
+                meeting.setMeeting_end(m.getMeeting_end());
+                meeting.setMeeting_type(m.getMeeting_type());
+                meeting.setMeeting_place(m.getMeeting_place());
+
+                meetingItem.add(meeting);
             }
-        });
+            recyclerViewAdapter = new MeetingsRecyclerViewAdapter(container.getContext(), meetingItem);
+            recyclerView.setAdapter(recyclerViewAdapter);
+            recyclerViewAdapter.notifyDataSetChanged();
+
+
+        }
+
+
         return root;
     }
 }

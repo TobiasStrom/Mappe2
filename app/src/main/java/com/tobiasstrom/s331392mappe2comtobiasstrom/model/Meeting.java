@@ -15,10 +15,9 @@ public class Meeting {
     public Meeting() {
     }
 
-    public Meeting(String meeting_start, String meeting_end, String meeting_date, String meeting_place, String meeting_type, int metingId) {
+    public Meeting(String meeting_start, String meeting_end, String meeting_place, String meeting_type, int metingId) {
         this.meeting_start = meeting_start;
         this.meeting_end = meeting_end;
-        this.meeting_date = meeting_date;
         this.meeting_place = meeting_place;
         this.meeting_type = meeting_type;
         this.metingId = metingId;
@@ -38,14 +37,6 @@ public class Meeting {
 
     public void setMeeting_end(String meeting_end) {
         this.meeting_end = meeting_end;
-    }
-
-    public String getMeeting_date() {
-        return meeting_date;
-    }
-
-    public void setMeeting_date(String meeting_date) {
-        this.meeting_date = meeting_date;
     }
 
     public String getMeeting_place() {
