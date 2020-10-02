@@ -14,12 +14,14 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.tobiasstrom.s331392mappe2comtobiasstrom.activities.NewContact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsRecyclerViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ContactsFragment extends Fragment {
@@ -83,6 +85,12 @@ public class ContactsFragment extends Fragment {
 
     @Override
     public void onResume() {
+        //oppdaterer kontakter inn i kontakt fragmentet etter at en ny kontakt har blitt oprettet
+        List<Contact> list = db.getAllContacts();
+
+        if (list.size() != contactList.size()) { //hvis det er flere kontakter inn i databasen enn i fragmentet
+            listItem.add(list.get(list.size()-1)); //legg den siste kontakten til kontakt listen på fragmentet
+        }
         super.onResume();
 
     }
