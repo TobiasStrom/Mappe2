@@ -193,6 +193,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return ant;
     }
 
+    public void deleteContactsFromMeeting(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(Constants.TABLE_COMBO, Constants.KEY_MEETINGTBL_ID + " =? ", new String[]{String.valueOf(id)});
+        db.close();
+    }
     //delete meeting
     public void deleteMeeting(int id){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -239,6 +244,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.insert(Constants.TABLE_COMBO, null, values);
         db.close();
+    }
+
+    public List<Integer> getContatctIdInMeeting(int meetingID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Integer> contactId = new ArrayList<>();
+        //select * from comboTBL where meetingTBL_ID = id;
+        String findPersonInMeeting = "SELECT * FROM "+Constants.TABLE_COMBO+" WHERE " + Constants.KEY_MEETINGTBL_ID+" = "+meetingID+";";
+
+        Cursor cursor = db.rawQuery(findPersonInMeeting, null);
+        if (cursor.moveToFirst()){
+            do {
+                Integer i = cursor.getInt(0);
+                contactId.add(i);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return contactId;
+
     }
 
     public List<Contact> getContactInMeeting(int meetingID){

@@ -27,6 +27,7 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsInMeetingRecyclerV
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -54,14 +55,12 @@ public class NewMeeting extends AppCompatActivity {
     private int id;
     private String newMeetingStart;
     private String newMeetingEnd;
-    private String newMeetingStartDate;
-    private String newMeetingStartTime;
-    private String newMeetingEndDate;
-    private String newMeetingEndTime;
     private String newMeetingType;
     private String newMeetingPlace;
     private ArrayList<Integer> selectedItems;
     private String[] participants;
+    private boolean[] selected;
+    List<Contact> contacts;
 
 
     View root;
@@ -94,7 +93,7 @@ public class NewMeeting extends AppCompatActivity {
             txtInputPlace.setText(newMeetingPlace);
             txtInputType.setText(newMeetingType);
 
-        }else {
+        } else {
             id = db.getMeetingCount()+1; //skapes en id som skal være det samme som sql vil lage
             Date date= new Date();
             Calendar calendar = Calendar.getInstance();
@@ -113,15 +112,26 @@ public class NewMeeting extends AppCompatActivity {
         }
 
         //her skal egentlig hentes alle de som ikke er i meeting med metoden getAllNotInMeeting har noe feil inn i seg
-        // Den bruker opp hele minnen til emulatoren og dreper den
-        List<Contact> contacts = db.getContactNotInMeeting(id);
-        participants = new String[contacts.size()];
+        contacts = db.getAllContacts();
+        List<Integer> contactsInMeeting = db.getContatctIdInMeeting(id);
+        Log.d(TAG, "onCreate: alle de som er i meeting"+ Arrays.toString(contactsInMeeting.toArray()));
+
+        participants = new String[contacts.size()];//alle kontakter (String[] er nødvendig for dialog)
+        selected = new boolean[contacts.size()]; //array som inneholder inforamsjon om hvilken verdier burde være checked i dialogen
 
         //hente kun navn fra contact liste dersom dialogen kan kun vise string array
         //her senere kan man gjøre slik at man appender navn og etternavn til en string
         for (int i = 0; i < participants.length; i++) {
             participants[i] = contacts.get(i).getFirstName();
+            int id = contacts.get(i).getContactId();
+            if (contactsInMeeting.indexOf(id) != -1) {
+                selected[i] = true;
+            } else {
+                selected[i] = false;
+            }
         }
+
+        Log.d(TAG, "onCreate: boolean array"+Arrays.toString(selected));
 
 
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -229,6 +239,17 @@ public class NewMeeting extends AppCompatActivity {
 
         db.addMeeting(meeting);
 
+        // TODO: 05.10.2020 sjekk hva som egentlig legges inn i selectedItems. kan hende at problemet er her
+        //her loopes det gjennom selectedItems array som burde inneholde ids til valgte elementer i dialogen
+
+        if (selectedItems != null) {
+            //db.deleteContactsFromMeeting(id);
+            for (Integer i : selectedItems) {
+                db.addContactToMeeting(id, contacts.get(i).getContactId());
+            }
+        }
+
+
 
     }
     public void showPopup(){
@@ -267,14 +288,14 @@ public class NewMeeting extends AppCompatActivity {
     //noe som har blitt hentet fra android.com
     //https://developer.android.com/guide/topics/ui/dialogs#java
     //dette skaper en dialog med en multichoice list og lagrer valgte elementer til selectedItems arrayList<Integer>
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    private Dialog onCreateDialog(Bundle savedInstanceState) {
         selectedItems = new ArrayList();  // Where we track the selected items
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Set the dialog title
         builder.setTitle("Choose participants")
                 // Specify the list array, the items to be selected by default (null for none),
                 // and the listener through which to receive callbacks when items are selected
-                .setMultiChoiceItems(participants, null,
+                .setMultiChoiceItems(participants, selected,
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which,
@@ -304,6 +325,8 @@ public class NewMeeting extends AppCompatActivity {
 
         return builder.create();
     }
+
+
 
 
 
