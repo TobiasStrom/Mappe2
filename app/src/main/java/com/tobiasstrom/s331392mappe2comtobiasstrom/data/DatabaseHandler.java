@@ -126,7 +126,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.delete(Constants.TABLE_CONTACT, Constants.KEY_CONTACT_ID + " =? ", new String[]{String.valueOf(id)});
         db.close();
     }
-    //
+
+    //update contact
     public int updateContact(Contact contact){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -245,7 +246,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //select customerTBL.customer_firsname from customerTBl cross join comboTBL on customerTBL.id = comboTBL.customerTBl_id  where comboTBL.meetingTBL_id =1;
     }
 
-    public List<Contact> getContactNotInMeeting(int meetingID){
+    public List<Contact> getContactNotInMeeting(int meetingID){ // NOTE: denne metoden virker men resultatet blir ikke fulstending riktig.
         SQLiteDatabase db = this.getReadableDatabase();
         List<Contact> contactsList = new ArrayList<>();
         String[] colummns = {Constants.KEY_CONTACT_ID,Constants.KEY_CONTACT_FIRSTNAME,Constants.KEY_CONTACT_LASTNAME,Constants.KEY_CONTACT_PHONENUMBER,Constants.KEY_CONTACT_EMAIL};

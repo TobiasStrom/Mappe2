@@ -89,7 +89,7 @@ public class NewMeeting extends AppCompatActivity {
             newMeetingEnd = bundle.getString("meeting_end");
             newMeetingPlace = bundle.getString("meeting_place");
             newMeetingType = bundle.getString("meeting_type");
-            id = Integer.parseInt(bundle.getString("meeting_id")); // TODO: 02.10.2020 her viser seg til å at en feil id passeres
+            id = Integer.parseInt(bundle.getString("meeting_id"));
             Log.d(TAG, "onCreate: id for meeting"+id);
             txtInputPlace.setText(newMeetingPlace);
             txtInputType.setText(newMeetingType);
