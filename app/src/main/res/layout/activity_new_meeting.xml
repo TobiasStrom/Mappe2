@@ -131,7 +131,7 @@
     <Button
         android:id="@+id/btnAddParticipant"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Legg til"
         android:textSize="12sp"
