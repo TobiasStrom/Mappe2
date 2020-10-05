@@ -123,7 +123,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     //delete item
     public void deleteContact(int id){
         SQLiteDatabase db = this.getWritableDatabase();
+        //slettes rekord fra kontakter tabell
         db.delete(Constants.TABLE_CONTACT, Constants.KEY_CONTACT_ID + " =? ", new String[]{String.valueOf(id)});
+        //slettes rekord fra combo tabell
+        db.delete(Constants.TABLE_COMBO, Constants.KEY_CONTACTTBL_ID + " =? ", new String[]{String.valueOf(id)});
         db.close();
     }
 
@@ -180,9 +183,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return ant;
     }
 
+    //delete meeting
     public void deleteMeeting(int id){
         SQLiteDatabase db = this.getWritableDatabase();
+        //slettes rekord fra møte tabell
         db.delete(Constants.TABLE_MEETING, Constants.KEY_MEETING_ID + " =? ", new String[]{String.valueOf(id)});
+        //slettes rekord fra combo tabell
+        db.delete(Constants.TABLE_COMBO, Constants.KEY_MEETINGTBL_ID + " =? ", new String[]{String.valueOf(id)});
         db.close();
 
     }
