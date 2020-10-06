@@ -111,29 +111,23 @@ public class NewMeeting extends AppCompatActivity {
             txtTimeEnd.setText(time);
         }
 
-        //her skal egentlig hentes alle de som ikke er i meeting med metoden getAllNotInMeeting har noe feil inn i seg
         contacts = db.getAllContacts();
         participants = new String[contacts.size()];//alle kontakter (String[] er nødvendig for dialog)
         selected = new boolean[contacts.size()]; //array som inneholder inforamsjon om hvilken verdier burde være checked i dialogen
-        if (id != 0) {
-            List<Integer> contactsInMeeting = db.getContatctIdInMeeting(id);
-            //hente kun navn fra contact liste dersom dialogen kan kun vise string array
-            //her senere kan man gjøre slik at man appender navn og etternavn til en string
-            for (int i = 0; i < participants.length; i++) {
-                participants[i] = contacts.get(i).getFirstName();
+
+        if (id != 0) { //dersom det skal oppdateres en møte
+            List<Integer> contactsInMeeting = db.getContatctIdInMeeting(id); //henter de som er i en møte allerede
+            for (int i = 0; i < participants.length; i++) { //skaper array med navn og array med valgte elementer for dialogbox
+                participants[i] = contacts.get(i).getFirstName() + " " + contacts.get(i).getLastName();
                 int id = contacts.get(i).getContactId();
-                if (contactsInMeeting.indexOf(id) != -1) {
-                    selected[i] = true;
-                } else {
-                    selected[i] = false;
-                }
-            }
-        } else {
-            for (int i = 0; i < participants.length; i++) {
-                participants[i] = contacts.get(i).getFirstName();
+                selected[i] = contactsInMeeting.indexOf(id) != -1;
             }
 
-            //Arrays.fill(selected, false);
+        } else { //dersom det skal dannes en ny møte
+
+            for (int i = 0; i < participants.length; i++) {
+                participants[i] = contacts.get(i).getFirstName() + " " + contacts.get(i).getLastName();
+            }
         }
 
 
@@ -183,7 +177,6 @@ public class NewMeeting extends AppCompatActivity {
         btnAddParticipant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
                 //showPopup();
                 //skaper dialog ved hjelp av onCreateDialog metode
@@ -251,20 +244,15 @@ public class NewMeeting extends AppCompatActivity {
 
         db.addMeeting(meeting);
 
-        // TODO: 05.10.2020 sjekk hva som egentlig legges inn i selectedItems. kan hende at problemet er her
-        //her loopes det gjennom selectedItems array som burde inneholde ids til valgte elementer i dialogen
-
         if (selectedItems != null) {
-            //db.deleteContactsFromMeeting(id);
-            int id = db.getLastMeeting().getMetingId();
-            for (Integer i : selectedItems) {
+            int id = db.getLastMeeting().getMetingId(); //dette spår om hvilken id skal denne møten få i databasen, dette er sikkelig yikes men fungerer for nå
+            for (Integer i : selectedItems) {//looper gjennom nye verdier
                 db.addContactToMeeting(id, contacts.get(i).getContactId());
             }
+
         }
 
-        finish();
-
-
+        finish(); //lukke aktiviteten etter at møte har blitt endret
     }
 
     private void updateMeeting(View v) {
@@ -281,15 +269,19 @@ public class NewMeeting extends AppCompatActivity {
         meeting.setMeeting_place(newPlace);
         meeting.setMeeting_type(newType);
 
-        Log.d(TAG, "updateMeeting: "+meeting.getMeeting_place());
-
-        db.updateMeeting(meeting); //here is your problem, vet ikke hva som er problemet med antall personer oppdateres
+        db.updateMeeting(meeting);
 
         if (selectedItems != null) {
-            Log.d(TAG, "updateMeeting: "+id);
-            //db.deleteContactsFromMeeting(id);
-            for (Integer i : selectedItems) {
+
+            db.deleteContactsFromMeeting(id);//nullstille hvem som er knyttet til denne møte
+
+            for (Integer i : selectedItems) { //loope gjennom nye verdier
                 db.addContactToMeeting(id, contacts.get(i).getContactId());
+            }
+            for (int i = 0; i < selected.length; i++) { //loope gjennom verdier som er satt fra før
+                if (selected[i]) {
+                    db.addContactToMeeting(id, contacts.get(i).getContactId());
+                }
             }
         }
 
