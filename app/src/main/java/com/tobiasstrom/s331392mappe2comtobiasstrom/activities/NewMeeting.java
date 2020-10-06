@@ -94,7 +94,7 @@ public class NewMeeting extends AppCompatActivity {
             txtInputType.setText(newMeetingType);
 
         } else {
-            id = db.getMeetingCount()+1; //skapes en id som skal være det samme som sql vil lage
+            //id = db.getMeetingCount()+1; //skapes en id som skal være det samme som sql vil lage
             Date date= new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
@@ -113,25 +113,28 @@ public class NewMeeting extends AppCompatActivity {
 
         //her skal egentlig hentes alle de som ikke er i meeting med metoden getAllNotInMeeting har noe feil inn i seg
         contacts = db.getAllContacts();
-        List<Integer> contactsInMeeting = db.getContatctIdInMeeting(id);
-        Log.d(TAG, "onCreate: alle de som er i meeting"+ Arrays.toString(contactsInMeeting.toArray()));
-
         participants = new String[contacts.size()];//alle kontakter (String[] er nødvendig for dialog)
         selected = new boolean[contacts.size()]; //array som inneholder inforamsjon om hvilken verdier burde være checked i dialogen
-
-        //hente kun navn fra contact liste dersom dialogen kan kun vise string array
-        //her senere kan man gjøre slik at man appender navn og etternavn til en string
-        for (int i = 0; i < participants.length; i++) {
-            participants[i] = contacts.get(i).getFirstName();
-            int id = contacts.get(i).getContactId();
-            if (contactsInMeeting.indexOf(id) != -1) {
-                selected[i] = true;
-            } else {
-                selected[i] = false;
+        if (id != 0) {
+            List<Integer> contactsInMeeting = db.getContatctIdInMeeting(id);
+            //hente kun navn fra contact liste dersom dialogen kan kun vise string array
+            //her senere kan man gjøre slik at man appender navn og etternavn til en string
+            for (int i = 0; i < participants.length; i++) {
+                participants[i] = contacts.get(i).getFirstName();
+                int id = contacts.get(i).getContactId();
+                if (contactsInMeeting.indexOf(id) != -1) {
+                    selected[i] = true;
+                } else {
+                    selected[i] = false;
+                }
             }
-        }
+        } else {
+            for (int i = 0; i < participants.length; i++) {
+                participants[i] = contacts.get(i).getFirstName();
+            }
 
-        Log.d(TAG, "onCreate: boolean array"+Arrays.toString(selected));
+            //Arrays.fill(selected, false);
+        }
 
 
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +143,7 @@ public class NewMeeting extends AppCompatActivity {
 
                 final Bundle bundle = getIntent().getExtras();
                 if (bundle != null) {
+                    //oppdatere eksiterende møte
                     updateMeeting(view);
                 } else {
                     //create new instance
@@ -252,6 +256,7 @@ public class NewMeeting extends AppCompatActivity {
 
         if (selectedItems != null) {
             //db.deleteContactsFromMeeting(id);
+            int id = db.getLastMeeting().getMetingId();
             for (Integer i : selectedItems) {
                 db.addContactToMeeting(id, contacts.get(i).getContactId());
             }
@@ -281,6 +286,7 @@ public class NewMeeting extends AppCompatActivity {
         db.updateMeeting(meeting); //here is your problem, vet ikke hva som er problemet med antall personer oppdateres
 
         if (selectedItems != null) {
+            Log.d(TAG, "updateMeeting: "+id);
             //db.deleteContactsFromMeeting(id);
             for (Integer i : selectedItems) {
                 db.addContactToMeeting(id, contacts.get(i).getContactId());
@@ -328,7 +334,7 @@ public class NewMeeting extends AppCompatActivity {
     //https://developer.android.com/guide/topics/ui/dialogs#java
     //dette skaper en dialog med en multichoice list og lagrer valgte elementer til selectedItems arrayList<Integer>
     private Dialog onCreateDialog(Bundle savedInstanceState) {
-        selectedItems = new ArrayList();  // Where we track the selected items
+        selectedItems = new ArrayList<Integer>();  // Where we track the selected items
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Set the dialog title
         builder.setTitle("Choose participants")

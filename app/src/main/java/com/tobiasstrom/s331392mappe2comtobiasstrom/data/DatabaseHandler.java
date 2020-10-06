@@ -235,6 +235,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return i;
     }
 
+    public Meeting getLastMeeting() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sqlquerry = "Select * FROM " + Constants.TABLE_MEETING + " ORDER BY " + Constants.KEY_MEETING_ID + " DESC limit 1;";
+        Cursor cursor = db.rawQuery(sqlquerry, null);
+        cursor.moveToFirst();
+        Meeting meeting = new Meeting(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
+        cursor.close();
+        db.close();
+        return meeting;
+    }
+
     public void addContactToMeeting(int meetingID, int contactID){
         SQLiteDatabase db = this.getWritableDatabase();
 
