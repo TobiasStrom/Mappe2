@@ -82,7 +82,7 @@ public class NewMeeting extends AppCompatActivity {
         Log.d(TAG, "onCreate: before bunde check");
 
         btnSave = (Button) findViewById(R.id.btnSaveMeeting);
-        Bundle bundle = getIntent().getExtras();
+        final Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             newMeetingStart = bundle.getString("meeting_start");
             newMeetingEnd = bundle.getString("meeting_end");
@@ -137,7 +137,15 @@ public class NewMeeting extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveMeetingToDB(view);
+
+                final Bundle bundle = getIntent().getExtras();
+                if (bundle != null) {
+                    updateMeeting(view);
+                } else {
+                    //create new instance
+                    saveMeetingToDB(view);
+
+                }
             }
         });
 
@@ -249,9 +257,40 @@ public class NewMeeting extends AppCompatActivity {
             }
         }
 
+        finish();
 
 
     }
+
+    private void updateMeeting(View v) {
+        Meeting meeting = new Meeting();
+
+        String newStartDateTime = txtDateStart.getText().toString() + " " + txtTimeStart.getText().toString();
+        String newEndDateTime = txtDateEnd.getText().toString() + " " + txtTimeEnd.getText().toString();
+        String newPlace = txtInputPlace.getText().toString();
+        String newType = txtInputType.getText().toString();
+
+        meeting.setMetingId(id);
+        meeting.setMeeting_start(newStartDateTime);
+        meeting.setMeeting_end(newEndDateTime);
+        meeting.setMeeting_place(newPlace);
+        meeting.setMeeting_type(newType);
+
+        Log.d(TAG, "updateMeeting: "+meeting.getMeeting_place());
+
+        db.updateMeeting(meeting); //here is your problem, vet ikke hva som er problemet med antall personer oppdateres
+
+        if (selectedItems != null) {
+            //db.deleteContactsFromMeeting(id);
+            for (Integer i : selectedItems) {
+                db.addContactToMeeting(id, contacts.get(i).getContactId());
+            }
+        }
+
+        finish();
+
+    }
+
     public void showPopup(){
         //Oppretter en dialogbox og setter verdien til den custom_pop_up boks
         myDialog = new Dialog(this);

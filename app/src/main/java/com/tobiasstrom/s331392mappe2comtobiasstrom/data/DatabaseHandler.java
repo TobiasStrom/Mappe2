@@ -223,14 +223,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public int updateMeeting(Meeting meeting){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(Constants.KEY_MEETING_START, meeting.getMeeting_start());
         values.put(Constants.KEY_MEETING_END, meeting.getMeeting_end());
         values.put(Constants.KEY_MEETING_PLACE, meeting.getMeeting_place());
         values.put(Constants.KEY_MEETING_TYPE, meeting.getMeeting_type());
-        int i = db.update(Constants.TABLE_CONTACT, values, Constants.KEY_MEETING_ID + " =?", new String[]{String.valueOf(meeting.getMetingId())});
+        int i = db.update(Constants.TABLE_MEETING, values, Constants.KEY_MEETING_ID + " =? ", new String[]{String.valueOf(meeting.getMetingId())});
         db.close();
         return i;
     }
@@ -295,7 +295,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<Contact> getContactNotInMeeting(int meetingID){ // NOTE: denne metoden virker men resultatet blir ikke fulstending riktig.
         SQLiteDatabase db = this.getReadableDatabase();
         List<Contact> contactsList = new ArrayList<>();
-        String[] colummns = {Constants.KEY_CONTACT_ID,Constants.KEY_CONTACT_FIRSTNAME,Constants.KEY_CONTACT_LASTNAME,Constants.KEY_CONTACT_PHONENUMBER,Constants.KEY_CONTACT_EMAIL};
         /*String findPersonInMeeting = "SELECT *" +
                 " FROM "+ Constants.TABLE_CONTACT + " CROSS JOIN " + Constants.TABLE_COMBO + " ON "+ Constants.TABLE_CONTACT+"."+ Constants.KEY_CONTACT_ID + " = "+ Constants.TABLE_COMBO + "." + Constants.KEY_CONTACTTBL_ID +
                 " WHERE "+ Constants.TABLE_COMBO+ "."+ Constants.KEY_MEETINGTBL_ID + " = " + meetingID + ";";*/
