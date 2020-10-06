@@ -23,6 +23,7 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Meeting;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsInMeetingRecyclerViewAdapter;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,18 +52,31 @@ public class NewMeeting extends AppCompatActivity {
     private int id;
     private String newMeetingStart;
     private String newMeetingEnd;
-    private String newMeetingStartDate;
-    private String newMeetingStartTime;
-    private String newMeetingEndDate;
-    private String newMeetingEndTime;
+    private String innMeetingStartDate;
+    private String innMeetingStartTime;
+    private String innMeetingEndDate;
+    private String innMeetingEndTime;
     private String newMeetingType;
     private String newMeetingPlace;
+    private String dateEndFormat;
+    private String timeEndFormat;
+    private String timeStartFormat;
+    private String dateStartFormat;
+    private Date dateStart;
+    private Date dateEnd;
+    Date date;
+
+    private boolean newMeeting;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
 
     View root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        newMeeting = false;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_meeting);
 
@@ -86,13 +100,32 @@ public class NewMeeting extends AppCompatActivity {
             id = Integer.parseInt(bundle.getString("meeting_id"));
             txtInputPlace.setText(newMeetingPlace);
             txtInputType.setText(newMeetingType);
+            try {
+                dateStart=new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(newMeetingStart);
+                dateStartFormat = dateFormat.format(dateStart.getTime());
+                timeStartFormat = timeFormat.format(dateStart.getTime());
+                txtTimeStart.setText(timeStartFormat);
+                txtDateStart.setText(dateStartFormat);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            try {
+
+                dateEnd=new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(newMeetingEnd);
+                dateEndFormat = dateFormat.format(dateEnd.getTime());
+                timeEndFormat = timeFormat.format(dateEnd.getTime());
+                txtTimeEnd.setText(timeEndFormat);
+                txtDateEnd.setText(dateEndFormat);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
         }else {
-            Date date= new Date();
+            newMeeting = true;
+            date= new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:MM");
+
             String dateDate = dateFormat.format(calendar.getTime());
             txtDateStart.setText(dateDate);
             txtDateEnd.setText(dateDate);
@@ -112,30 +145,26 @@ public class NewMeeting extends AppCompatActivity {
         });
 
         txtDateStart.setOnClickListener(new View.OnClickListener() {
-
-
             @Override
-            public void onClick(View view) {
-                showDateDialog(txtDateStart);
+            public void onClick(View view) { showDateDialog(txtDateStart, true);
             }
         });
-
         txtDateEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDateDialog(txtDateEnd);
+                showDateDialog(txtDateEnd, false);
             }
         });
         txtTimeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTimeDalog(txtTimeStart);
+                showTimeDalog(txtTimeStart, true);
             }
         });
         txtTimeEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTimeDalog(txtTimeEnd);
+                showTimeDalog(txtTimeEnd, false);
             }
         });
         btnAddParticipant.setOnClickListener(new View.OnClickListener() {
@@ -144,11 +173,9 @@ public class NewMeeting extends AppCompatActivity {
                 showPopup();
             }
         });
-
-
     }
 
-    private void showTimeDalog(final TextView txtTimeStarts) {
+    private void showTimeDalog(final TextView txtTimeStarts, final boolean start) {
         final Calendar calendar = Calendar.getInstance();
 
         TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -160,18 +187,33 @@ public class NewMeeting extends AppCompatActivity {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
                 String formatedTime = simpleDateFormat.format(calendar.getTime());
                 txtTimeStarts.setText(formatedTime);
+
+                if(start){
+                    dateStart = calendar.getTime();
+                    timeStartFormat = formatedTime;
+                }
+                else {
+                    dateEnd = calendar.getTime();
+                    timeEndFormat = formatedTime;
+                }
             }
         };
-        new TimePickerDialog(NewMeeting.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
+        if(newMeeting){
+            new TimePickerDialog(NewMeeting.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
+        }else if(start){
+            calendar.setTime(dateStart);
+            new TimePickerDialog(NewMeeting.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
+        }
+        else {
+            calendar.setTime(dateEnd);
+            new TimePickerDialog(NewMeeting.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
+        }
+
     }
 
-    private void showDateDialog (final TextView txtDateStarts) {
+    private void showDateDialog (final TextView txtDateStarts, final boolean start) {
         final Calendar calendar = Calendar.getInstance();
-        Calendar calendarr = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-        Log.e(TAG, "showDateDialog: " + simpleDateFormat.format(calendar.getTime()));
-        Log.e(TAG, "showDateDialog: " + calendar.getTime() );
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -180,12 +222,33 @@ public class NewMeeting extends AppCompatActivity {
                 calendar.set(Calendar.DAY_OF_MONTH, i2);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 Log.e(TAG, "onDateSet: " + calendar.toString() );
+
                 String formaterDate = simpleDateFormat.format(calendar.getTime());
                 Log.e(TAG, "onDateSet: " + formaterDate);
                 txtDateStarts.setText(formaterDate);
+
+                if(start){
+                    dateStart = calendar.getTime();
+                    dateStartFormat = formaterDate;
+                }
+                else {
+                    dateEnd = calendar.getTime();
+                    dateEndFormat = formaterDate;
+                }
             }
         };
-        new DatePickerDialog(NewMeeting.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        if(newMeeting){
+            new DatePickerDialog(NewMeeting.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            Log.e(TAG, "showDateDialog: " + calendar );
+        }else if(start){
+            calendar.setTime(dateStart);
+            Log.e(TAG, "showDateDialog: " + calendar );
+            new DatePickerDialog(NewMeeting.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        }else {
+            calendar.setTime(dateEnd);
+            Log.e(TAG, "showDateDialog: " + calendar );
+            new DatePickerDialog(NewMeeting.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        }
     }
 
     private void saveMeetingToDB(View v){
