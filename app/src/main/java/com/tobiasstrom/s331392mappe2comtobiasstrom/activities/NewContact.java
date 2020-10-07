@@ -65,6 +65,7 @@ public class NewContact extends AppCompatActivity {
         contact.setPhoneNumber(newPhoneNumber);
 
         db.addContacts(contact);
+        //her burde være noe som notifydatasetupdate, slik at listen i kontakter skulle oppdatere automatisk slik det skjer ved fjerning
 
     }
     /*
