@@ -21,7 +21,6 @@ import java.util.Locale;
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHandler";
 
-
     public DatabaseHandler(Context context) {
         super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
     }
@@ -138,8 +137,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     //update contact
     public int updateContact(Contact contact){
-        SQLiteDatabase db = this.getReadableDatabase();
 
+        SQLiteDatabase db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
         values.put(Constants.KEY_CONTACT_FIRSTNAME, contact.getFirstName());
         values.put(Constants.KEY_CONTACT_LASTNAME, contact.getLastName());
