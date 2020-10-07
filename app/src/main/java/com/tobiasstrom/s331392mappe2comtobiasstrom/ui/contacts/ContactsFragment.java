@@ -14,12 +14,14 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.tobiasstrom.s331392mappe2comtobiasstrom.activities.NewContact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsRecyclerViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ContactsFragment extends Fragment {
@@ -30,7 +32,7 @@ public class ContactsFragment extends Fragment {
     private ContactsRecyclerViewAdapter recyclerViewAdapter;
     private ListView lvContacts;
     private List<Contact> contactList;
-    private List<Contact> listItem;
+    private List<Contact> listItem = new ArrayList<>();
     private DatabaseHandler db;
     View root;
 
@@ -40,18 +42,16 @@ public class ContactsFragment extends Fragment {
         db = new DatabaseHandler(activity);
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        contactsViewModel =
-                ViewModelProviders.of(this).get(ContactsViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        contactsViewModel = ViewModelProviders.of(this).get(ContactsViewModel.class);
         //root = inflater.inflate(R.layout.fragment_contacts, container, false);
 
         db = new DatabaseHandler(container.getContext());
         Log.e(TAG, "onCreateView: Meetings " + db.getMeetingCount() );
         Log.e(TAG, "onCreateView: Contact " + db.getContactCount() );
-        if(db.getContactCount() <= 0 ){
+        if (db.getContactCount() <= 0 ){
             root = inflater.inflate(R.layout.fragment_no_contacts, container, false);
-        }else {
+        } else {
             root = inflater.inflate(R.layout.fragment_contacts, container, false);
 
             recyclerView = (RecyclerView) root.findViewById(R.id.recyclerViewID);
@@ -83,6 +83,7 @@ public class ContactsFragment extends Fragment {
 
     @Override
     public void onResume() {
+        //her er det mulig å oppdatere kontakt liste men det er ikke så enkelt og krever hacking
         super.onResume();
 
     }
