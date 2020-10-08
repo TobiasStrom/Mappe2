@@ -61,7 +61,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_COMBO_TABLE);
         db.execSQL(CREATE_MEETING_TABLE);
         db.execSQL(CREATE_CONTACTS_TABLE);
-        db.close();
+        //db.close();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
         db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_COMBO);
         onCreate(db);
-        db.close();
+        //db.close();
     }
 
 
@@ -87,7 +87,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Constants.KEY_CONTACT_PHONENUMBER, contact.getPhoneNumber());
 
         db.insert(Constants.TABLE_CONTACT, null, values);
-        db.close();
+        //db.close();
     }
     //get all Grocery
     public List<Contact> getAllContacts(){
@@ -110,7 +110,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 contactList.add(contact);
             }while (cursor.moveToNext());
         }
-        db.close();
+        //db.close();
         return contactList;
     }
 
@@ -121,7 +121,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(countQuery, null);
         int i = cursor.getCount();
-        db.close();
+        //db.close();
         return i;
     }
 
@@ -132,7 +132,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.delete(Constants.TABLE_CONTACT, Constants.KEY_CONTACT_ID + " =? ", new String[]{String.valueOf(id)});
         //slettes rekord fra combo tabell
         db.delete(Constants.TABLE_COMBO, Constants.KEY_CONTACTTBL_ID + " =? ", new String[]{String.valueOf(id)});
-        db.close();
+        //db.close();
     }
 
     //update contact
@@ -144,7 +144,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Constants.KEY_CONTACT_LASTNAME, contact.getLastName());
         values.put(Constants.KEY_CONTACT_PHONENUMBER, contact.getPhoneNumber());
         values.put(Constants.KEY_CONTACT_EMAIL, contact.getEmail());
-        db.close();
+        //db.close();
 
         return db.update(Constants.TABLE_CONTACT, values, Constants.KEY_CONTACT_ID + " =?" , new String[]{String.valueOf(contact.getContactId())});
 
@@ -174,7 +174,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         cursor.close();
-        db.close();
+        //db.close();
         return meetingList;
     }
 
@@ -185,17 +185,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(countQuery, null);
         int ant = 0;
-        if (cursor.moveToFirst()) {
+        if(cursor.moveToFirst())
+        {
             ant = cursor.getInt(cursor.getColumnIndex("MeetingCount"));
         }
-        db.close();
+        //db.close();
         return ant;
+
     }
 
     public void deleteContactsFromMeeting(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(Constants.TABLE_COMBO, Constants.KEY_MEETINGTBL_ID + " =? ", new String[]{String.valueOf(id)});
-        db.close();
+        //db.close();
     }
     //delete meeting
     public void deleteMeeting(int id){
@@ -216,9 +218,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Constants.KEY_MEETING_END, meeting.getMeeting_end());
         values.put(Constants.KEY_MEETING_PLACE, meeting.getMeeting_place());
         values.put(Constants.KEY_MEETING_TYPE, meeting.getMeeting_type());
+        Log.e(TAG, "addMeeting: " + meeting.getMeeting_start() );
+        Log.e(TAG, "addMeeting: " + meeting.getMeeting_end() );
+        Log.e(TAG, "addMeeting: " + meeting.getMeeting_place() );
+        Log.e(TAG, "addMeeting: " + meeting.getMeeting_type() );
+        Log.e(TAG, "addMeeting: " + db.insert(Constants.TABLE_MEETING,null, values));
 
-        db.insert(Constants.TABLE_MEETING,null, values);
-        db.close();
+        //db.close();
     }
 
     public int updateMeeting(Meeting meeting){
@@ -230,7 +236,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Constants.KEY_MEETING_PLACE, meeting.getMeeting_place());
         values.put(Constants.KEY_MEETING_TYPE, meeting.getMeeting_type());
         int i = db.update(Constants.TABLE_MEETING, values, Constants.KEY_MEETING_ID + " =? ", new String[]{String.valueOf(meeting.getMetingId())});
-        db.close();
+        //db.close();
         return i;
     }
 
@@ -241,7 +247,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         Meeting meeting = new Meeting(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
         cursor.close();
-        db.close();
+        //db.close();
         return meeting;
     }
 
@@ -253,7 +259,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Constants.KEY_MEETINGTBL_ID, meetingID);
 
         db.insert(Constants.TABLE_COMBO, null, values);
-        db.close();
+        //db.close();
     }
 
     public List<Integer> getContatctIdInMeeting(int meetingID) {
@@ -271,7 +277,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        db.close();
+        //db.close();
         return contactId;
 
     }
@@ -297,7 +303,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }while (cursor.moveToNext());
         }
         cursor.close();
-        db.close();
+        //db.close();
         return contactsList;
         //select customerTBL.customer_firsname from customerTBl cross join comboTBL on customerTBL.id = comboTBL.customerTBl_id  where comboTBL.meetingTBL_id =1;
     }
@@ -334,7 +340,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }while (cursor.moveToNext());
         }
         cursor.close();
-        db.close();
+        //db.close();
         return contactsList;
         //select customerTBL.customer_firsname from customerTBl cross join comboTBL on customerTBL.id = comboTBL.customerTBl_id  where comboTBL.meetingTBL_id =1;
     }

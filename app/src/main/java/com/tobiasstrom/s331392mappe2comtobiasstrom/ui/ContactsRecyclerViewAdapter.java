@@ -88,6 +88,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
                     int position = getAdapterPosition();
                     Contact contact = contactItems.get(position);
                     Intent intent = new Intent(context, ContactDetailsActivity.class);
+                    intent.putExtra("id", contact.getContactId());
                     intent.putExtra("firstname", contact.getFirstName());
                     intent.putExtra("lastname", contact.getLastName());
                     intent.putExtra("phone", contact.getPhoneNumber());
@@ -152,6 +153,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
                     Contact contact = contactItems.get(position);
                     Intent intent = new Intent(context, ContactDetailsActivity.class);
                     intent.putExtra("id", contact.getContactId());
+                    Log.e(TAG, "onClick: " + contact.getContactId() );
                     intent.putExtra("firstname", contact.getFirstName());
                     intent.putExtra("lastname", contact.getLastName());
                     intent.putExtra("phone", contact.getPhoneNumber());

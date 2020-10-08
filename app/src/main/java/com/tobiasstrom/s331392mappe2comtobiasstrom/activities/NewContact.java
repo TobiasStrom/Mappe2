@@ -1,12 +1,21 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import androidx.appcompat.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toolbar;
 
 import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
@@ -15,10 +24,12 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import java.util.List;
 
 public class NewContact extends AppCompatActivity {
-    private Button btnSave;
+    private static final String TAG = "NewContact";
+
     private List<Contact> contactsList;
     private List<Contact> listContact;
     private DatabaseHandler db;
+    private ActionBar toolbar;
 
     private EditText editFirstName;
     private EditText editLastName;
@@ -30,7 +41,15 @@ public class NewContact extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_contact);
-        getSupportActionBar().hide();
+        /*
+        toolbar = (Toolbar) findViewById(R.id.toolbarNewContact);
+        toolbar.setTitle("hei");
+        setActionBar(toolbar);
+
+
+         */
+        toolbar = getSupportActionBar();
+        toolbar.setTitle(getText(R.string.newCntact));
 
         db = new DatabaseHandler(this);
 
@@ -39,19 +58,9 @@ public class NewContact extends AppCompatActivity {
         editEmail = findViewById(R.id.editEmail);
         editPhoneNumber = findViewById(R.id.editPhoneNumber);
 
-        btnSave = findViewById(R.id.btnUpdate);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!editFirstName.getText().toString().isEmpty() && !editLastName.getText().toString().isEmpty() && !editEmail.getText().toString().isEmpty() && !editPhoneNumber.getText().toString().isEmpty()){
-                    saveContactToDB(view);
-                    finish();
-                }
-            }
-        });
     }
 
-    private void saveContactToDB(View v){
+    private void saveContactToDB(){
         Contact contact = new Contact();
 
         String newFistName = editFirstName.getText().toString();
@@ -67,6 +76,22 @@ public class NewContact extends AppCompatActivity {
         db.addContacts(contact);
         //her burde være noe som notifydatasetupdate, slik at listen i kontakter skulle oppdatere automatisk slik det skjer ved fjerning
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.contact_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Log.e(TAG, "onOptionsItemSelected: trykket " );
+        if(!editFirstName.getText().toString().isEmpty() && !editLastName.getText().toString().isEmpty() && !editEmail.getText().toString().isEmpty() && !editPhoneNumber.getText().toString().isEmpty()){
+            saveContactToDB();
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
     /*
     private void restartActivity(){
