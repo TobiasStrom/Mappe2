@@ -18,7 +18,7 @@
             android:id="@+id/textView_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Firstname"
+            android:text="@string/firstname"
             tools:text="Firstname" />
 
         <EditText
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="Firstname"
+            android:hint="@string/firstnameHint"
             android:inputType="textPersonName" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Lastname" />
+            android:text="@string/lastname" />
 
         <EditText
             android:id="@+id/editLastName"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="Lastname"
+            android:hint="@string/lastnameHint"
             android:inputType="textPersonName" />
 
         <TextView
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Email" />
+            android:text="@string/email" />
 
         <EditText
             android:id="@+id/editEmail"
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="exempel@email.com"
+            android:hint="@string/emailHint"
             android:inputType="textEmailAddress" />
 
         <TextView
@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="PhoneNumber" />
+            android:text="@string/phonenumber" />
 
         <EditText
             android:id="@+id/editPhoneNumber"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="12345678"
+            android:hint="@string/phonenumberHint"
             android:inputType="phone" />
 
     </LinearLayout>

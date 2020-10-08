@@ -7,33 +7,24 @@
     tools:context=".activities.ContactDetailsActivity">
 
     <Toolbar
+        android:id="@+id/toolbar2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </Toolbar>
 
-    <TextView
-        android:id="@+id/txtDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.120000005" />
-
     <EditText
         android:id="@+id/txtUpdateFirstname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDetails" />
+        app:layout_constraintTop_toTopOf="@+id/toolbar2"
+        app:layout_constraintVertical_bias="0.24000001" />
 
     <EditText
         android:id="@+id/txtUpdateLastname"

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:text="Start tid"
+        android:text="@string/startTime"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,10 +22,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="1/10/2020"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView10"
-        app:layout_constraintStart_toStartOf="@+id/guideline3" />
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        tools:text="01/10/2020" />
 
     <TextView
         android:id="@+id/textView12"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Slutt tid"
+        android:text="@string/endTime"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="1/10/2020"
+        tools:text="01/10/2020"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView12"
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Sted"
+        android:text="@string/place"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Type"
+        android:text="@string/type"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
@@ -110,7 +110,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        android:text="Deltagere"
+        android:text="@string/parsipitent"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/textView16" />
@@ -128,16 +128,15 @@
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnAddParticipant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Legg til"
-        android:textSize="12sp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="@+id/textView20"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/textView20" />
+        app:layout_constraintTop_toTopOf="@+id/textView20"
+        app:layout_constraintVertical_bias="0.555" />
 
     <EditText
         android:id="@+id/txtInputPlace"
@@ -146,12 +145,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="Skole"
+        android:hint="@string/placeHint"
         android:inputType="textPersonName"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        tools:text="Skole" />
+        tools:text="@string/placeHint" />
 
     <EditText
         android:id="@+id/txtIputType"
@@ -160,11 +159,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="Diskusjon"
+        android:hint="@string/typeHint"
         android:inputType="textPersonName"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        tools:text="Diskusjon" />
+        tools:text="@string/typeHint" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

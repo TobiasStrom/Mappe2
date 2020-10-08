@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tobiasstrom.s331392mappe2comtobiasstrom.activities.ContactDetailsActivity;

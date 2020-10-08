@@ -50,7 +50,7 @@ public class ContactDetailsActivity extends AppCompatActivity {
         toolbar = getSupportActionBar();
         toolbar.setTitle(getText(R.string.updateContact));
 
-        txtDetails = (TextView) findViewById(R.id.txtDetails);
+
         txtFirstname = (EditText) findViewById(R.id.txtUpdateFirstname);
         txtLastname = (EditText) findViewById(R.id.txtUpdateLastname);
         txtEmail = (EditText) findViewById(R.id.txtUpdateEmail);
@@ -68,7 +68,6 @@ public class ContactDetailsActivity extends AppCompatActivity {
 
             txtFirstname.setText(firstName);
             txtLastname.setText(lastName);
-            txtDetails.setText(firstName);
             txtEmail.setText(email);
             txtPhoneNumber.setText(phonenumber);
             Log.e(TAG, "onOptionsItemSelected: " + id );

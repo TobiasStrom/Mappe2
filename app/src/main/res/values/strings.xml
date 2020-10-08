@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Meetings</string>
+    <string name="app_name">Møter</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Tobias Strøm</string>
@@ -10,8 +10,7 @@
 
     <string name="menu_contacts">Kontakter</string>
     <string name="menu_meetings">Møter</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+
     <string name="menu_settings">Innstillinger</string>
     <string name="editContact">Du har oppdatert på </string>
     <string name="newCntact">Ny kontakt</string>
@@ -19,5 +18,20 @@
     <string name="newMeeting">Nytt møte</string>
     <string name="editMeeting">Rediger møte</string>
     <string name="noChange">Ingen Endring</string>
+    <string name="firstname">Fornavn</string>
+    <string name="lastname">Fornavn</string>
+    <string name="email">Mail</string>
+    <string name="phonenumber">Telefon nummer</string>
+    <string name="emailHint">eksempel@email.no</string>
+    <string name="phonenumberHint">12345678</string>
+    <string name="lastnameHint">Norman</string>
+    <string name="firstnameHint">Ola</string>
+    <string name="startTime">Start tid</string>
+    <string name="endTime">Slutt tid</string>
+    <string name="place">Sted</string>
+    <string name="type">Type</string>
+    <string name="parsipitent">Deltagere</string>
+    <string name="placeHint">Skole</string>
+    <string name="typeHint">Diskusjon</string>
 
 </resources>

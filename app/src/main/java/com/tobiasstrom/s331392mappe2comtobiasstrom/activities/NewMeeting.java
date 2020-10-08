@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -55,7 +56,7 @@ public class NewMeeting extends AppCompatActivity {
     private TextView txtTimeEnd;
     private EditText txtInputPlace;
     private EditText txtInputType;
-    private Button btnAddParticipant;
+    private ImageButton btnAddParticipant;
     private ListView tvParticipant;
     private List<Contact> contactList;
     private List<Contact> listItem;
@@ -102,7 +103,7 @@ public class NewMeeting extends AppCompatActivity {
         txtTimeEnd = (TextView) findViewById(R.id.txtTimeEnd);
         txtInputPlace = (EditText) findViewById(R.id.txtInputPlace);
         txtInputType = (EditText) findViewById(R.id.txtIputType);
-        btnAddParticipant = (Button) findViewById(R.id.btnAddParticipant);
+        btnAddParticipant = (ImageButton) findViewById(R.id.btnAddParticipant);
         Log.d(TAG, "onCreate: before bunde check");
 
 
