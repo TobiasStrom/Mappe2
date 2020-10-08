@@ -167,13 +167,4 @@
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         tools:text="Diskusjon" />
 
-    <Button
-        android:id="@+id/btnSaveMeeting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="save"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btnAddParticipant"
-        app:layout_constraintStart_toEndOf="@+id/btnAddParticipant" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,8 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +14,9 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -40,6 +46,7 @@ public class NewMeeting extends AppCompatActivity {
     private DatabaseHandler db;
 
     private static final String TAG = "NewMeeting";
+    private ActionBar toolbar;
 
     private Dialog myDialog;
     private TextView txtDateStart;
@@ -49,18 +56,12 @@ public class NewMeeting extends AppCompatActivity {
     private EditText txtInputPlace;
     private EditText txtInputType;
     private Button btnAddParticipant;
-    private Button btnSave;
     private ListView tvParticipant;
     private List<Contact> contactList;
     private List<Contact> listItem;
     private int id;
     private String newMeetingStart;
     private String newMeetingEnd;
-
-    private String innMeetingStartDate;
-    private String innMeetingStartTime;
-    private String innMeetingEndDate;
-    private String innMeetingEndTime;
     private String newMeetingType;
     private String newMeetingPlace;
     private String dateEndFormat;
@@ -87,12 +88,13 @@ public class NewMeeting extends AppCompatActivity {
 
     @Override
 
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         newMeeting = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_meeting);
 
         db = new DatabaseHandler(this);
+        toolbar = getSupportActionBar();
 
         txtDateStart = (TextView) findViewById(R.id.txtDateStart);
         txtTimeStart = (TextView) findViewById(R.id.txtTimeStart);
@@ -103,7 +105,7 @@ public class NewMeeting extends AppCompatActivity {
         btnAddParticipant = (Button) findViewById(R.id.btnAddParticipant);
         Log.d(TAG, "onCreate: before bunde check");
 
-        btnSave = (Button) findViewById(R.id.btnSaveMeeting);
+
         final Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             newMeetingStart = bundle.getString("meeting_start");
@@ -114,6 +116,7 @@ public class NewMeeting extends AppCompatActivity {
             Log.d(TAG, "onCreate: id for meeting"+id);
             txtInputPlace.setText(newMeetingPlace);
             txtInputType.setText(newMeetingType);
+            toolbar.setTitle(getText(R.string.editMeeting));
             try {
                 dateStart=new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(newMeetingStart);
                 dateStartFormat = dateFormat.format(dateStart.getTime());
@@ -142,6 +145,7 @@ public class NewMeeting extends AppCompatActivity {
       
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
+            toolbar.setTitle(getText(R.string.newMeeting));
 
             String dateDate = dateFormat.format(calendar.getTime());
             txtDateStart.setText(dateDate);
@@ -173,23 +177,6 @@ public class NewMeeting extends AppCompatActivity {
             }
         }
 
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final Bundle bundle = getIntent().getExtras();
-                if (bundle != null) {
-                    //oppdatere eksiterende møte
-                    updateMeeting(view);
-                } else {
-                    //create new instance
-                    saveMeetingToDB(view);
-
-                }
-            }
-        });
-
         txtDateStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { showDateDialog(txtDateStart, true);
@@ -216,7 +203,6 @@ public class NewMeeting extends AppCompatActivity {
         btnAddParticipant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //showPopup();
                 //skaper dialog ved hjelp av onCreateDialog metode
                 Dialog dialog = onCreateDialog(savedInstanceState);
@@ -304,7 +290,7 @@ public class NewMeeting extends AppCompatActivity {
         }
     }
 
-    private void saveMeetingToDB(View v){
+    private void saveMeetingToDB(){
         Meeting meeting = new Meeting();
 
         String newStartDateTime = txtDateStart.getText().toString() + " " + txtTimeStart.getText().toString();
@@ -330,7 +316,7 @@ public class NewMeeting extends AppCompatActivity {
         finish(); //lukke aktiviteten etter at møte har blitt endret
     }
 
-    private void updateMeeting(View v) {
+    private void updateMeeting() {
         Meeting meeting = new Meeting();
 
         String newStartDateTime = txtDateStart.getText().toString() + " " + txtTimeStart.getText().toString();
@@ -437,6 +423,28 @@ public class NewMeeting extends AppCompatActivity {
 
         return builder.create();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.contact_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (!newMeeting) {
+            //oppdatere eksiterende møte
+            updateMeeting();
+        } else {
+            //create new instance
+            saveMeetingToDB();
+            Log.e(TAG, "onClick:  lagt til en møte" );
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
 
