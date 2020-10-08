@@ -52,15 +52,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/email" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/errFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/emailHint"
+                android:inputType="textEmailAddress" />
 
-        <EditText
-            android:id="@+id/editEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="@string/emailHint"
-            android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <TextView
             android:id="@+id/textView_phone"

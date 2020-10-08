@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:text="21:00"
+        android:text="@string/timeStart"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/txtDateStart"
         app:layout_constraintStart_toEndOf="@+id/txtDateStart" />
@@ -85,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:text="21:30"
+        android:text="@string/timeEnd"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/txtDateEnd"
         app:layout_constraintStart_toEndOf="@+id/txtDateEnd" />
@@ -130,13 +130,14 @@
 
     <ImageButton
         android:id="@+id/btnAddParticipant"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="?android:selectableItemBackground"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="@+id/textView20"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/textView20"
-        app:layout_constraintVertical_bias="0.555" />
+         />
 
     <EditText
         android:id="@+id/txtInputPlace"

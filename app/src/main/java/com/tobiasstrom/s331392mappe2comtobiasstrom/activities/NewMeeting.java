@@ -391,7 +391,7 @@ public class NewMeeting extends AppCompatActivity {
         selectedItems = new ArrayList<Integer>();  // Where we track the selected items
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Set the dialog title
-        builder.setTitle("Choose participants")
+        builder.setTitle(R.string.chooseParticipants)
                 // Specify the list array, the items to be selected by default (null for none),
                 // and the listener through which to receive callbacks when items are selected
                 .setMultiChoiceItems(participants, selected,
@@ -409,14 +409,14 @@ public class NewMeeting extends AppCompatActivity {
                             }
                         })
                 // Set the action buttons
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK, so save the selectedItems results somewhere
                         // or return them to the component that opened the dialog
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                     }
@@ -434,15 +434,25 @@ public class NewMeeting extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (!newMeeting) {
-            //oppdatere eksiterende møte
-            updateMeeting();
-        } else {
-            //create new instance
-            saveMeetingToDB();
-            Log.e(TAG, "onClick:  lagt til en møte" );
+        if(dateStart.before(dateEnd)){
+            txtTimeEnd.setTextColor(getResources().getColor(R.color.black));
+            txtDateEnd.setTextColor(getResources().getColor(R.color.black));
+            if (!newMeeting) {
+                //oppdatere eksiterende møte
+                updateMeeting();
+            } else {
+                //create new instance
+                saveMeetingToDB();
+                Log.e(TAG, "onClick:  lagt til en møte" );
 
+            }
         }
+        else {
+            txtTimeEnd.setTextColor(getResources().getColor(R.color.red));
+            txtDateEnd.setTextColor(getResources().getColor(R.color.red));
+            Log.e(TAG, "onOptionsItemSelected: dag 1 må være før dag 2"  );
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

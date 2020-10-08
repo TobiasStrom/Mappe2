@@ -33,5 +33,17 @@
     <string name="parsipitent">Deltagere</string>
     <string name="placeHint">Skole</string>
     <string name="typeHint">Diskusjon</string>
+    <string name="chooseParticipants">Velg deltagere</string>
+    <string name="OK">OK</string>
+    <string name="cancel">Lukk</string>
+    <string name="timeStart">21:30</string>
+    <string name="timeEnd">22:00</string>
+    <string name="wrongName">Ikke godkjent fornavn</string>
+    <string name="wrongNameLast">Feil format fornavn</string>
+    <string name="emtyField">Du må skrive inn i alle feiltene</string>
+    <string name="wrongPhonenumber">Telefon nummere kan bare inne holde tall</string>
+    <string name="wrongPhonenumberLengt">Telefon nummer kan bare indeholde 8 tegn pluss landskode</string>
+    <string name="wrongEmailFormat">Feil format på mail</string>
+    <string name="needChange">"Du å endre på "</string>
 
 </resources>
