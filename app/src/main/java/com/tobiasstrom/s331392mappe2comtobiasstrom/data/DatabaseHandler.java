@@ -159,7 +159,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         List<Meeting> meetingList = new ArrayList<>();
         Cursor cursor = db.query(Constants.TABLE_MEETING, new String[]{
                 Constants.KEY_MEETING_ID, Constants.KEY_MEETING_START, Constants.KEY_MEETING_END, Constants.KEY_MEETING_PLACE, Constants.KEY_MEETING_TYPE
-        }, null, null, null, null, Constants.KEY_MEETING_START + " DESC");
+        }, null, null, null, null, Constants.KEY_MEETING_START);
 
         if (cursor.moveToFirst()){
             do {

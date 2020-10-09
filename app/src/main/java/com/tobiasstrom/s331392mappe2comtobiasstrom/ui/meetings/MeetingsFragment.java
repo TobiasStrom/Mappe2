@@ -27,54 +27,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MeetingsFragment extends Fragment {
-
-    private ContactsViewModel contactsViewModel;
-    private RecyclerView recyclerView;
+    
     private MeetingsRecyclerViewAdapter recyclerViewAdapter;
-    private ListView lvContacts;
     private List<Meeting> meetingList;
-    private List<Meeting> meetingItem;
     private DatabaseHandler db;
     View root;
 
-    private MeetingsViewModel meetingsViewModel;
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        meetingsViewModel =
-                ViewModelProviders.of(this).get(MeetingsViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         db = new DatabaseHandler(container.getContext());
 
-        if (db.getMeetingCount() <= 0 ){
+        /*if (db.getMeetingCount() == 0 ){
             root = inflater.inflate(R.layout.fragment_no_meetings, container, false);
-        }else{
+        } else {
             root = inflater.inflate(R.layout.fragment_meetings, container, false);
 
-            recyclerView = (RecyclerView) root.findViewById(R.id.recyclerViewMeetingID);
+            recyclerView = root.findViewById(R.id.recyclerViewMeetingID);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
 
-            meetingList = new ArrayList<>();
-            meetingItem = new ArrayList<>();
             meetingList = db.getAllMeetings();
 
-            for(Meeting m : meetingList){
-                Meeting meeting = new Meeting();
-                meeting.setMetingId(m.getMetingId());
-                meeting.setMeeting_start(m.getMeeting_start());
-                meeting.setMeeting_end(m.getMeeting_end());
-                meeting.setMeeting_type(m.getMeeting_type());
-                meeting.setMeeting_place(m.getMeeting_place());
-
-                meetingItem.add(meeting);
-            }
-            recyclerViewAdapter = new MeetingsRecyclerViewAdapter(container.getContext(), meetingItem);
+            recyclerViewAdapter = new MeetingsRecyclerViewAdapter(container.getContext(), meetingList);
             recyclerView.setAdapter(recyclerViewAdapter);
-            recyclerViewAdapter.notifyDataSetChanged();
 
+        }*/
 
-        }
+        //Dette gjør at rooten er altid attached slik at den viser møte listen.
+        //Dersom den blir ikke attached i tilfelde hvor det er ingen møte, etter at den første møte er opprettet er det umulig å vise den (fordi listen er ikke attached)
+        //etter at ny møte har blitt opprettet kjøres det kun onresume som ikke har tilgang til inflater.
+        root = inflater.inflate(R.layout.fragment_meetings, container, false);
+
+        RecyclerView recyclerView = root.findViewById(R.id.recyclerViewMeetingID);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+
+        meetingList = db.getAllMeetings();
+
+        recyclerViewAdapter = new MeetingsRecyclerViewAdapter(container.getContext(), meetingList);
+        recyclerView.setAdapter(recyclerViewAdapter);
 
 
         return root;
@@ -82,12 +73,17 @@ public class MeetingsFragment extends Fragment {
 
     @Override
     public void onResume() {
-        //oppdaterer meetinger inn i meeting fragmentet etter at en ny meeting har blitt oprettet
-        /*List<Meeting> list = db.getAllMeetings();
 
-        if (list.size() != meetingList.size()) { //hvis det er flere meetings inn i databasen enn i fragmentet
-            meetingItem.add(list.get(list.size()-1)); //legg den siste meetingen til meeting listen på fragmentet
-        }*/
+        //her forventes det at meetingList og recyclerViewAdapter skapes uansett hva i onCreateView
+        if (meetingList.size() < db.getAllMeetings().size()) { //dersom det er flere møter inn i db enn det vises
+            //meetingList.add(db.getAllMeetings().get(0)); //legg til den manglende møte (dette vil ikke sortere nye verdien)
+
+            //populate arrayet på nytt dersom listen med møter som hentes er sorter
+            meetingList.clear();
+            meetingList.addAll(db.getAllMeetings());
+            recyclerViewAdapter.notifyDataSetChanged();
+        }
+
         super.onResume();
 
     }
