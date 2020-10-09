@@ -1,21 +1,15 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.ui;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.tobiasstrom.s331392mappe2comtobiasstrom.activities.ContactDetailsActivity;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
@@ -59,12 +53,11 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         return contactItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         final TextView tvTxtFirstName;
         final TextView tvTxtLastName;
         final TextView tvTxtEmail;
         final TextView tvTxtPhone;
-        public ImageButton btnDelete;
         public androidx.constraintlayout.widget.ConstraintLayout pane;
 
         public int id;
@@ -77,8 +70,6 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
             this.tvTxtEmail = v.findViewById(R.id.tvTxtEmail);
             this.tvTxtPhone = v.findViewById(R.id.tvTxtPhone);
             this.pane = v.findViewById(R.id.contactPane);
-            //this.btnDelete = v.findViewById(R.id.btnDelete);
-            //btnDelete.setOnClickListener(this);
 
             //vanlig onClick listener, den avfyres dersom kontakt panellen har ble trykket på
             //dette brukes for å endre kontaktens informasjon
@@ -135,51 +126,11 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
             });
 
-
-            v.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    Log.e(TAG, "onLongClick: Finker detter");
-                    return false;
-                }
-            });
-
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-
-                    Contact contact = contactItems.get(position);
-                    Intent intent = new Intent(context, ContactDetailsActivity.class);
-                    intent.putExtra("firstname", contact.getFirstName());
-                    intent.putExtra("lastname", contact.getLastName());
-                    intent.putExtra("phone", contact.getPhoneNumber());
-                    intent.putExtra("email", contact.getEmail());
-                    context.startActivity(intent);
-                }
-            });
-
         }
 
         //@Override
-        public void onClick(View v) {
-            /*switch (v.getId()){
-                case R.id.btnDelete:
 
-                    int position = getAdapterPosition();
-                    Contact contact = contactItems.get(position);
-                    DatabaseHandler db = new DatabaseHandler(context);
-                    //delete item
-                    db.deleteContact(contact.getContactId());
-                    contactItems.remove(getAdapterPosition());
-                    notifyItemRemoved(getAdapterPosition());
-                    break;
-            }*/
-        }
 
-        public void onLongClick(View v){
-            
-        }
 
     }
 

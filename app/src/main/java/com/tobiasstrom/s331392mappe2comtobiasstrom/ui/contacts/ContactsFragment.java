@@ -25,66 +25,65 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ContactsFragment extends Fragment {
-    private static final String TAG = "ContactsFragment";
 
-    private ContactsViewModel contactsViewModel;
-    private RecyclerView recyclerView;
+    private static final String TAG = "ContactsFragment";
     private ContactsRecyclerViewAdapter recyclerViewAdapter;
-    private ListView lvContacts;
     private List<Contact> contactList;
-    private List<Contact> listItem = new ArrayList<>();
     private DatabaseHandler db;
     View root;
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        db = new DatabaseHandler(activity);
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        contactsViewModel = ViewModelProviders.of(this).get(ContactsViewModel.class);
-        //root = inflater.inflate(R.layout.fragment_contacts, container, false);
 
         db = new DatabaseHandler(container.getContext());
-        Log.e(TAG, "onCreateView: Meetings " + db.getMeetingCount() );
-        Log.e(TAG, "onCreateView: Contact " + db.getContactCount() );
-        if (db.getContactCount() <= 0 ){
+
+        /*if (db.getContactCount() == 0 ) {
             root = inflater.inflate(R.layout.fragment_no_contacts, container, false);
+
         } else {
             root = inflater.inflate(R.layout.fragment_contacts, container, false);
 
-            recyclerView = (RecyclerView) root.findViewById(R.id.recyclerViewID);
+            RecyclerView recyclerView = root.findViewById(R.id.recyclerViewID);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
 
-            contactList = new ArrayList<>();
-            listItem = new ArrayList<>();
             contactList = db.getAllContacts();
 
-            for (Contact c : contactList) {
-                Contact contact = new Contact();
-                contact.setFirstName(c.getFirstName());
-                contact.setLastName(c.getLastName());
-                contact.setContactId(c.getContactId());
-                contact.setEmail(c.getEmail());
-                contact.setPhoneNumber(c.getPhoneNumber());
-
-                listItem.add(contact);
-            }
-
-            recyclerViewAdapter = new ContactsRecyclerViewAdapter(container.getContext(), listItem);
+            recyclerViewAdapter = new ContactsRecyclerViewAdapter(container.getContext(), contactList);
             recyclerView.setAdapter(recyclerViewAdapter);
-            recyclerViewAdapter.notifyDataSetChanged();
-        }
+        }*/
+
+        //Dette gjør at rooten er altid attached slik at den viser kontakt listen.
+        //Dersom den blir ikke attached i tilfelde hvor det er ingen kontakt, etter at den første kontakt er opprettet er det umulig å vise den (fordi listen er ikke attached)
+        //etter at ny kontakt har blitt opprettet kjøres det kun onresume som ikke har tilgang til inflater.
+        root = inflater.inflate(R.layout.fragment_contacts, container, false);
+
+        RecyclerView recyclerView = root.findViewById(R.id.recyclerViewID);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+
+        contactList = db.getAllContacts();
+
+        recyclerViewAdapter = new ContactsRecyclerViewAdapter(container.getContext(), contactList);
+        recyclerView.setAdapter(recyclerViewAdapter);
 
         return root;
     }
 
     @Override
     public void onResume() {
-        //her er det mulig å oppdatere kontakt liste men det er ikke så enkelt og krever hacking
+
+        //her forventes det at contactList og recyclerViewAdapter skapes uansett hva i onCreateView
+        if (contactList.size() < db.getAllContacts().size()) { //dersom det er flere kontakter inn i db enn det vises
+            //contactList.add(db.getAllContacts().get(0)); //legg til den manglende kontakt (dette vil ikke sortere nye verdien)
+
+            //populate arrayet på nytt dersom listen med kontakter som hentes er sorter
+            contactList.clear();
+            contactList.addAll(db.getAllContacts());
+            recyclerViewAdapter.notifyDataSetChanged();
+        }
+
         super.onResume();
 
     }
+
 }

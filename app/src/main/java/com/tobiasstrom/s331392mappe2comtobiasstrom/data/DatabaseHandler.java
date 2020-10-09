@@ -90,7 +90,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert(Constants.TABLE_CONTACT, null, values);
         db.close();
     }
-    //get all Grocery
+
+    //get all contacts
     public List<Contact> getAllContacts(){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -98,9 +99,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Constants.TABLE_CONTACT, new String[]{
                 Constants.KEY_CONTACT_ID, Constants.KEY_CONTACT_FIRSTNAME, Constants.KEY_CONTACT_LASTNAME, Constants.KEY_CONTACT_PHONENUMBER, Constants.KEY_CONTACT_EMAIL
-        }, null, null, null, null, Constants.KEY_CONTACT_LASTNAME + " DESC");
-        if (cursor.moveToFirst()){
-            do{
+        }, null, null, null, null, Constants.KEY_CONTACT_LASTNAME);
+        if (cursor.moveToFirst()) {
+            do {
                 Contact contact = new Contact();
                 contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_ID))));
                 contact.setFirstName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_FIRSTNAME)));
@@ -109,8 +110,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));
 
                 contactList.add(contact);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
+        cursor.close();
         db.close();
         return contactList;
     }
