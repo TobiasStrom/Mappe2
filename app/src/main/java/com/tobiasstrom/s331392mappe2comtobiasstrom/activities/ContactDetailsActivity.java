@@ -37,6 +37,8 @@ public class ContactDetailsActivity extends AppCompatActivity {
     String email;
     String phonenumber;
     private int id;
+    private String outMessege;
+    private boolean inputValidation;
 
 
 
@@ -46,6 +48,8 @@ public class ContactDetailsActivity extends AppCompatActivity {
         db = new DatabaseHandler(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_details);
+
+        inputValidation = false;
 
         toolbar = getSupportActionBar();
         toolbar.setTitle(getText(R.string.updateContact));
@@ -139,16 +143,68 @@ public class ContactDetailsActivity extends AppCompatActivity {
 
         Context context = getApplicationContext();
         CharSequence text = getText(R.string.noChange);
-        if(changed()){
-            text = getText(R.string.editContact) + " " + contact.getFirstName();
-            db.updateContact(contact);
+        int duration = Toast.LENGTH_LONG;
+        if (wrongInput()){
+            if(changed()){
+                text = getText(R.string.editContact) + " " + contact.getFirstName();
+                db.updateContact(contact);
+            }
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            finish();
+        }else{
+            Toast toast = Toast.makeText(context, outMessege, duration);
+            toast.show();
         }
 
-        int duration = Toast.LENGTH_LONG;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-        finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean wrongInput(){
+        inputValidation = true;
+        outMessege = "";
+        outMessege += getText(R.string.needChange);
+        if(txtFirstname.getText().toString().isEmpty() || txtLastname.getText().toString().isEmpty() ||
+                txtEmail.getText().toString().isEmpty() || txtPhoneNumber.getText().toString().isEmpty()){
+            outMessege += "\n" + getText(R.string.emtyField);
+            inputValidation = false;
+
+        }
+        if (!txtFirstname.getText().toString().matches("[a-zøæåA-ZÆØÅ_]+")) {
+            //errFirstName.setError(getText(R.string.wrongName));
+            //errFirstName.setErrorEnabled(true);
+            outMessege += "\n" + getText(R.string.wrongName);
+            inputValidation = false;
+        }
+        else {
+            //errFirstName.setErrorEnabled(true);
+        }
+        if (!txtLastname.getText().toString().matches("[a-zøæåA-ZÆØÅ_]+")) {
+            outMessege += "\n" + getText(R.string.wrongNameLast);
+            //editLastName.setTextColor(getResources().getColor(R.color.red));
+            inputValidation = false;
+        }
+        else {
+            txtLastname.setTextColor(getResources().getColor(R.color.black));
+        }
+        if (!txtPhoneNumber.getText().toString().matches("[0-9+]+")) {
+            outMessege += "\n" + getText(R.string.wrongPhonenumber);
+            System.out.println("Invalid number");
+            inputValidation = false;
+        }
+        if (txtPhoneNumber.getText().toString().length() == 8 || txtPhoneNumber.getText().toString().length() == 11 || txtPhoneNumber.getText().toString().length() == 12) {
+
+        }else{
+            outMessege += "\n" + getText(R.string.wrongPhonenumberLengt);
+            Log.e(TAG, "wrongInput: " + txtPhoneNumber.getText().toString().length() );
+            inputValidation = false;
+        }
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        if (!txtEmail.getText().toString().matches(regex)) {
+            outMessege += "\n" + getText(R.string.wrongEmailFormat);
+            inputValidation = false;
+        }
+
+        return inputValidation;
     }
 }

@@ -44,6 +44,8 @@
     <string name="wrongPhonenumber">Telefon nummere kan bare inne holde tall</string>
     <string name="wrongPhonenumberLengt">Telefon nummer kan bare indeholde 8 tegn pluss landskode</string>
     <string name="wrongEmailFormat">Feil format på mail</string>
-    <string name="needChange">"Du å endre på "</string>
+    <string name="needChange">"Du må endre på: "</string>
+    <string name="wrong_date">Slutttid må være etter starttid</string>
+    <string name="meetingEmty">Du må fylle alle felt</string>
 
 </resources>

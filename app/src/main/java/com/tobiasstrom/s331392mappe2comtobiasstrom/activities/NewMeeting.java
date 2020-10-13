@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
@@ -147,7 +149,7 @@ public class NewMeeting extends AppCompatActivity {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             toolbar.setTitle(getText(R.string.newMeeting));
-
+            dateStart = calendar.getTime();
             String dateDate = dateFormat.format(calendar.getTime());
             txtDateStart.setText(dateDate);
             txtDateEnd.setText(dateDate);
@@ -155,6 +157,7 @@ public class NewMeeting extends AppCompatActivity {
             Log.e(TAG, "onCreate: " + time );
             txtTimeStart.setText(time);
             calendar.add(Calendar.MINUTE, 30);
+            dateEnd = calendar.getTime();
             time = timeFormat.format(calendar.getTime());
             txtTimeEnd.setText(time);
         }
@@ -434,25 +437,34 @@ public class NewMeeting extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(dateStart.before(dateEnd)){
-            txtTimeEnd.setTextColor(getResources().getColor(R.color.black));
-            txtDateEnd.setTextColor(getResources().getColor(R.color.black));
-            if (!newMeeting) {
-                //oppdatere eksiterende møte
-                updateMeeting();
-            } else {
-                //create new instance
-                saveMeetingToDB();
-                Log.e(TAG, "onClick:  lagt til en møte" );
-
-            }
+        if (txtInputType.getText().toString().isEmpty() || txtInputPlace.getText().toString().isEmpty()){
+            int duration = Toast.LENGTH_LONG;
+            Context context = getApplicationContext();
+            Toast toast = Toast.makeText(context, R.string.meetingEmty, duration);
+            toast.show();
         }
         else {
-            txtTimeEnd.setTextColor(getResources().getColor(R.color.red));
-            txtDateEnd.setTextColor(getResources().getColor(R.color.red));
-            Log.e(TAG, "onOptionsItemSelected: dag 1 må være før dag 2"  );
+            if(dateStart.before(dateEnd)){
+                txtTimeEnd.setTextColor(getResources().getColor(R.color.black));
+                txtDateEnd.setTextColor(getResources().getColor(R.color.black));
+                if (!newMeeting) {
+                    //oppdatere eksiterende møte
+                    updateMeeting();
+                } else {
+                    //create new instance
+                    saveMeetingToDB();
+                    Log.e(TAG, "onClick:  lagt til en møte" );
+                }
+            }
+            else {
+                txtTimeEnd.setTextColor(getResources().getColor(R.color.red));
+                txtDateEnd.setTextColor(getResources().getColor(R.color.red));
+                int duration = Toast.LENGTH_LONG;
+                Context context = getApplicationContext();
+                Toast toast = Toast.makeText(context, R.string.wrong_date, duration);
+                toast.show();
+            }
         }
-
         return super.onOptionsItemSelected(item);
     }
 
