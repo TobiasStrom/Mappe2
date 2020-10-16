@@ -6,12 +6,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -36,6 +40,10 @@ public class NewContact extends AppCompatActivity {
     private EditText editEmail;
     private EditText editPhoneNumber;
     private String outMessege;
+    private TextView txtErrorFirstnameNewContact;
+    private TextView txtErrorLastNameNewContact;
+    private TextView txtErrorMailNewContact;
+    private TextView txtErrorPhonenumberNewContact;
     private boolean inputValidation;
 
 
@@ -60,7 +68,15 @@ public class NewContact extends AppCompatActivity {
         editLastName = findViewById(R.id.editLastName);
         editEmail = findViewById(R.id.editEmail);
         editPhoneNumber = findViewById(R.id.editPhoneNumber);
-        errFirstName = findViewById(R.id.errFirstName);
+        txtErrorFirstnameNewContact = findViewById(R.id.txtErrorFirstnameNewContact);
+        txtErrorLastNameNewContact = findViewById(R.id.txtErrorLastNameNewContact);
+        txtErrorPhonenumberNewContact = findViewById(R.id.txtErrorPhonenumberNewContact);
+        txtErrorMailNewContact = findViewById(R.id.txtErrorMailNewContact);
+        txtErrorFirstnameNewContact.setVisibility(View.INVISIBLE);
+        txtErrorLastNameNewContact.setVisibility(View.INVISIBLE);
+        txtErrorMailNewContact.setVisibility(View.INVISIBLE);
+        txtErrorPhonenumberNewContact.setVisibility(View.INVISIBLE);
+
 
     }
 
@@ -97,12 +113,6 @@ public class NewContact extends AppCompatActivity {
             saveContactToDB();
             finish();
         }
-        else {
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, outMessege, duration);
-            toast.show();
-        }
         return super.onOptionsItemSelected(item);
     }
     /*
@@ -117,49 +127,58 @@ public class NewContact extends AppCompatActivity {
     public void wrongInput(){
         inputValidation = true;
         outMessege = "";
-        outMessege += getText(R.string.needChange);
         if(editFirstName.getText().toString().isEmpty() || editLastName.getText().toString().isEmpty() ||
                 editEmail.getText().toString().isEmpty() || editPhoneNumber.getText().toString().isEmpty()){
-            outMessege += "\n" + getText(R.string.emtyField);
+            outMessege += getText(R.string.emtyField);
             inputValidation = false;
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, outMessege, duration);
+            toast.show();
 
         }
         if (!editFirstName.getText().toString().matches("[a-zøæåA-ZÆØÅ_]+")) {
-            //errFirstName.setError(getText(R.string.wrongName));
-            //errFirstName.setErrorEnabled(true);
-            outMessege += "\n" + getText(R.string.wrongName);
+            txtErrorFirstnameNewContact.setVisibility(View.VISIBLE);
+            txtErrorFirstnameNewContact.setText(getText(R.string.wrongName));
             inputValidation = false;
         }
         else {
-            //errFirstName.setErrorEnabled(true);
+            txtErrorFirstnameNewContact.setVisibility(View.INVISIBLE);
         }
         if (!editLastName.getText().toString().matches("[a-zøæåA-ZÆØÅ_]+")) {
-            outMessege += "\n" + getText(R.string.wrongNameLast);
-            editLastName.setTextColor(getResources().getColor(R.color.red));
+            txtErrorLastNameNewContact.setText(getText(R.string.wrongNameLast));
+            txtErrorLastNameNewContact.setVisibility(View.VISIBLE);
             inputValidation = false;
         }
         else {
-            editLastName.setTextColor(getResources().getColor(R.color.black));
+            txtErrorLastNameNewContact.setVisibility(View.INVISIBLE);
         }
         if (!editPhoneNumber.getText().toString().matches("[0-9+]+")) {
-            outMessege += "\n" + getText(R.string.wrongPhonenumber);
+            txtErrorPhonenumberNewContact.setText(getText(R.string.wrongPhonenumber));
+            txtErrorPhonenumberNewContact.setVisibility(View.VISIBLE);
             System.out.println("Invalid number");
             inputValidation = false;
+        }else {
+            txtErrorPhonenumberNewContact.setVisibility(View.INVISIBLE);
         }
         if (editPhoneNumber.getText().toString().length() == 8 || editPhoneNumber.getText().toString().length() == 11 || editPhoneNumber.getText().toString().length() == 12) {
-
+            txtErrorPhonenumberNewContact.setVisibility(View.INVISIBLE);
         }else{
-            outMessege += "\n" + getText(R.string.wrongPhonenumberLengt);
+            txtErrorPhonenumberNewContact.setText(getText(R.string.wrongPhonenumberLengt));
+            txtErrorPhonenumberNewContact.setVisibility(View.VISIBLE);
             Log.e(TAG, "wrongInput: " + editPhoneNumber.getText().toString().length() );
             inputValidation = false;
         }
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         if (!editEmail.getText().toString().matches(regex)) {
-            outMessege += "\n" + getText(R.string.wrongEmailFormat);
+            txtErrorMailNewContact.setText(getText(R.string.wrongEmailFormat));
+            txtErrorMailNewContact.setVisibility(View.VISIBLE);
+
             inputValidation = false;
         }
-
-
+        else {
+            txtErrorMailNewContact.setVisibility(View.INVISIBLE);
+        }
     }
 
 }

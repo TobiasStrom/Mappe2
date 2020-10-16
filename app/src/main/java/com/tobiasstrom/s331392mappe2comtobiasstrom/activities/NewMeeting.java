@@ -33,6 +33,7 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Meeting;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsInMeetingRecyclerViewAdapter;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.util.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -80,7 +81,7 @@ public class NewMeeting extends AppCompatActivity {
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     
-    private ArrayList<Integer> selectedItems;
+
     private String[] participants;
     private boolean[] selected;
     List<Contact> contacts;
@@ -211,6 +212,7 @@ public class NewMeeting extends AppCompatActivity {
                 //skaper dialog ved hjelp av onCreateDialog metode
                 Dialog dialog = onCreateDialog(savedInstanceState);
                 dialog.show();
+                Log.e(TAG, "onClick: " + Constants.selectedItems.size());
             }
         });
     }
@@ -309,9 +311,9 @@ public class NewMeeting extends AppCompatActivity {
 
         db.addMeeting(meeting);
 
-        if (selectedItems != null) {
+        if (Constants.selectedItems != null) {
             int id = db.getLastMeeting().getMetingId(); //dette spår om hvilken id skal denne møten få i databasen, dette er sikkelig yikes men fungerer for nå
-            for (Integer i : selectedItems) {//looper gjennom nye verdier
+            for (Integer i : Constants.selectedItems) {//looper gjennom nye verdier
                 db.addContactToMeeting(id, contacts.get(i).getContactId());
             }
 
@@ -336,11 +338,11 @@ public class NewMeeting extends AppCompatActivity {
 
         db.updateMeeting(meeting);
 
-        if (selectedItems != null) {
+        if (Constants.selectedItems != null) {
 
             db.deleteContactsFromMeeting(id);//nullstille hvem som er knyttet til denne møte
 
-            for (Integer i : selectedItems) { //loope gjennom nye verdier
+            for (Integer i : Constants.selectedItems) { //loope gjennom nye verdier
                 db.addContactToMeeting(id, contacts.get(i).getContactId());
             }
             for (int i = 0; i < selected.length; i++) { //loope gjennom verdier som er satt fra før
@@ -391,7 +393,7 @@ public class NewMeeting extends AppCompatActivity {
     //https://developer.android.com/guide/topics/ui/dialogs#java
     //dette skaper en dialog med en multichoice list og lagrer valgte elementer til selectedItems arrayList<Integer>
     private Dialog onCreateDialog(Bundle savedInstanceState) {
-        selectedItems = new ArrayList<Integer>();  // Where we track the selected items
+        Constants.selectedItems = new ArrayList<Integer>();  // Where we track the selected items
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Set the dialog title
         builder.setTitle(R.string.chooseParticipants)
@@ -404,10 +406,10 @@ public class NewMeeting extends AppCompatActivity {
                                                 boolean isChecked) {
                                 if (isChecked) {
                                     // If the user checked the item, add it to the selected items
-                                    selectedItems.add(which);
-                                } else if (selectedItems.contains(which)) {
+                                    Constants.selectedItems.add(which);
+                                } else if (Constants.selectedItems.contains(which)) {
                                     // Else, if the item is already in the array, remove it
-                                    selectedItems.remove(Integer.valueOf(which));
+                                    Constants.selectedItems.remove(Integer.valueOf(which));
                                 }
                             }
                         })
@@ -417,6 +419,7 @@ public class NewMeeting extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK, so save the selectedItems results somewhere
                         // or return them to the component that opened the dialog
+                        Log.e(TAG, "onClick: " + Constants.selectedItems.size());
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

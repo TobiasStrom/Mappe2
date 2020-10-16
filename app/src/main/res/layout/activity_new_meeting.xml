@@ -22,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView10"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
@@ -43,10 +44,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        tools:text="01/10/2020"
+        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView12"
-        app:layout_constraintStart_toStartOf="@+id/guideline3" />
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        tools:text="01/10/2020" />
 
     <TextView
         android:id="@+id/textView14"
@@ -76,6 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="@string/timeStart"
+        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/txtDateStart"
         app:layout_constraintStart_toEndOf="@+id/txtDateStart" />
@@ -86,6 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="@string/timeEnd"
+        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/txtDateEnd"
         app:layout_constraintStart_toEndOf="@+id/txtDateEnd" />
@@ -133,11 +137,11 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:background="?android:selectableItemBackground"
+        android:contentDescription="@string/add"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="@+id/textView20"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/textView20"
-         />
+        app:layout_constraintTop_toTopOf="@+id/textView20" />
 
     <EditText
         android:id="@+id/txtInputPlace"
@@ -148,10 +152,12 @@
         android:ems="10"
         android:hint="@string/placeHint"
         android:inputType="textPersonName"
+        android:textColor="@color/black"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        tools:text="@string/placeHint" />
+        tools:text="@string/placeHint"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/txtIputType"
@@ -162,9 +168,11 @@
         android:ems="10"
         android:hint="@string/typeHint"
         android:inputType="textPersonName"
+        android:textColor="@color/black"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        tools:text="@string/typeHint" />
+        tools:text="@string/typeHint"
+        android:autofillHints="" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

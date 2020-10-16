@@ -31,6 +31,13 @@
             android:inputType="textPersonName" />
 
         <TextView
+            android:id="@+id/txtErrorFirstnameNewContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@color/red" />
+
+        <TextView
             android:id="@+id/textView_last"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,26 +54,33 @@
             android:inputType="textPersonName" />
 
         <TextView
+            android:id="@+id/txtErrorLastNameNewContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@color/red" />
+
+        <TextView
             android:id="@+id/textView_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/email" />
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/errFirstName"
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/emailHint"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/txtErrorMailNewContact"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/editEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:hint="@string/emailHint"
-                android:inputType="textEmailAddress" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@color/red" />
 
         <TextView
             android:id="@+id/textView_phone"
@@ -83,6 +97,13 @@
             android:ems="10"
             android:hint="@string/phonenumberHint"
             android:inputType="phone" />
+
+        <TextView
+            android:id="@+id/txtErrorPhonenumberNewContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@color/red" />
 
     </LinearLayout>
 

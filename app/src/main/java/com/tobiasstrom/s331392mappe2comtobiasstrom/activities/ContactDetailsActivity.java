@@ -37,6 +37,10 @@ public class ContactDetailsActivity extends AppCompatActivity {
     String email;
     String phonenumber;
     private int id;
+    private TextView txtErrorFirstname;
+    private TextView txtErrorLastName;
+    private TextView txtErrorMail;
+    private TextView txtErrorPhonenumber;
     private String outMessege;
     private boolean inputValidation;
 
@@ -60,6 +64,15 @@ public class ContactDetailsActivity extends AppCompatActivity {
         txtEmail = (EditText) findViewById(R.id.txtUpdateEmail);
         txtPhoneNumber =(EditText) findViewById(R.id.txtUpdatePhoneNumber);
 
+        txtErrorFirstname = findViewById(R.id.txtErrorFirstname);
+        txtErrorLastName = findViewById(R.id.txtErrorLastName);
+        txtErrorPhonenumber = findViewById(R.id.txtErrorPhonenumber);
+        txtErrorMail = findViewById(R.id.txtErrorMail);
+        txtErrorFirstname.setVisibility(View.INVISIBLE);
+        txtErrorLastName.setVisibility(View.INVISIBLE);
+        txtErrorMail.setVisibility(View.INVISIBLE);
+        txtErrorPhonenumber.setVisibility(View.INVISIBLE);
+
 
         Bundle bundle = getIntent().getExtras();
 
@@ -77,34 +90,6 @@ public class ContactDetailsActivity extends AppCompatActivity {
             Log.e(TAG, "onOptionsItemSelected: " + id );
 
         }
-        /*
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Contact contact  = new Contact();
-                contact.setContactId(id);
-                contact.setFirstName(txtFirstname.getText().toString());
-                contact.setLastName(txtLastname.getText().toString());
-                contact.setEmail(txtEmail.getText().toString());
-                contact.setPhoneNumber(txtPhoneNumber.getText().toString());
-                db.updateContact(contact);
-
-                Context context = getApplicationContext();
-                CharSequence text = "Ingen endring";
-                if(changed()){
-                    text = getText(R.string.editContact) + " " + contact.getFirstName();
-                }
-
-                int duration = Toast.LENGTH_LONG;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-                finish();
-
-            }
-        });
-
-         */
     }
     public boolean changed(){
         boolean value = false;
@@ -152,9 +137,6 @@ public class ContactDetailsActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
             finish();
-        }else{
-            Toast toast = Toast.makeText(context, outMessege, duration);
-            toast.show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -163,46 +145,57 @@ public class ContactDetailsActivity extends AppCompatActivity {
     public boolean wrongInput(){
         inputValidation = true;
         outMessege = "";
-        outMessege += getText(R.string.needChange);
         if(txtFirstname.getText().toString().isEmpty() || txtLastname.getText().toString().isEmpty() ||
                 txtEmail.getText().toString().isEmpty() || txtPhoneNumber.getText().toString().isEmpty()){
-            outMessege += "\n" + getText(R.string.emtyField);
+            outMessege += getText(R.string.emtyField);
             inputValidation = false;
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, outMessege, duration);
+            toast.show();
 
         }
         if (!txtFirstname.getText().toString().matches("[a-zøæåA-ZÆØÅ_]+")) {
-            //errFirstName.setError(getText(R.string.wrongName));
-            //errFirstName.setErrorEnabled(true);
-            outMessege += "\n" + getText(R.string.wrongName);
+            txtErrorFirstname.setVisibility(View.VISIBLE);
+            txtErrorFirstname.setText(getText(R.string.wrongName));
             inputValidation = false;
         }
         else {
-            //errFirstName.setErrorEnabled(true);
+            txtErrorFirstname.setVisibility(View.INVISIBLE);
         }
         if (!txtLastname.getText().toString().matches("[a-zøæåA-ZÆØÅ_]+")) {
-            outMessege += "\n" + getText(R.string.wrongNameLast);
-            //editLastName.setTextColor(getResources().getColor(R.color.red));
+            txtErrorLastName.setText(getText(R.string.wrongNameLast));
+            txtErrorLastName.setVisibility(View.VISIBLE);
             inputValidation = false;
         }
         else {
-            txtLastname.setTextColor(getResources().getColor(R.color.black));
+            txtErrorLastName.setVisibility(View.INVISIBLE);
         }
         if (!txtPhoneNumber.getText().toString().matches("[0-9+]+")) {
-            outMessege += "\n" + getText(R.string.wrongPhonenumber);
+            txtErrorPhonenumber.setText(getText(R.string.wrongPhonenumber));
+            txtErrorPhonenumber.setVisibility(View.VISIBLE);
             System.out.println("Invalid number");
             inputValidation = false;
+        }else {
+            txtErrorPhonenumber.setVisibility(View.INVISIBLE);
         }
         if (txtPhoneNumber.getText().toString().length() == 8 || txtPhoneNumber.getText().toString().length() == 11 || txtPhoneNumber.getText().toString().length() == 12) {
-
+            txtErrorPhonenumber.setVisibility(View.INVISIBLE);
         }else{
-            outMessege += "\n" + getText(R.string.wrongPhonenumberLengt);
+            txtErrorPhonenumber.setText(getText(R.string.wrongPhonenumberLengt));
+            txtErrorPhonenumber.setVisibility(View.VISIBLE);
             Log.e(TAG, "wrongInput: " + txtPhoneNumber.getText().toString().length() );
             inputValidation = false;
         }
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         if (!txtEmail.getText().toString().matches(regex)) {
-            outMessege += "\n" + getText(R.string.wrongEmailFormat);
+            txtErrorMail.setText(getText(R.string.wrongEmailFormat));
+            txtErrorMail.setVisibility(View.VISIBLE);
+
             inputValidation = false;
+        }
+        else {
+            txtErrorMail.setVisibility(View.INVISIBLE);
         }
 
         return inputValidation;

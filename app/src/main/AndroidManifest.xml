@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tobiasstrom.s331392mappe2comtobiasstrom">
 
+    <uses-permission android:name="com.tobiasstrom.contentprovidermeetings.permission"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE">
+    </uses-permission>
+    <permission android:name="com.tobiasstrom.contentprovidermeetings.permission"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,6 +27,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:name=".data.ContentProviderHandeler"
+            android:authorities="com.tobiasstrom.contentprovidermeetings"
+            android:enabled="true"
+            android:exported="true"
+            android:readPermission="com.tobiasstrom.contentprovidermeetings.permission"
+            android:writePermission="com.tobiasstrom.contentprovidermeetings.permission">
+        </provider>
     </application>
 
 </manifest>
