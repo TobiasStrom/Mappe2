@@ -17,6 +17,7 @@
             </intent-filter>
         </receiver>
         <service android:name=".services.MeetingNotifyService"/>
+        <service android:name=".services.CycleService"/>
         <activity android:name=".activities.NewMeeting"></activity>
         <activity android:name=".activities.ContactDetailsActivity" />
         <activity android:name=".activities.NewContact" />
