@@ -14,6 +14,7 @@
         <receiver android:name=".activities.OnBootCompletedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="test"/>
             </intent-filter>
         </receiver>
         <service android:name=".services.MeetingNotifyService"/>

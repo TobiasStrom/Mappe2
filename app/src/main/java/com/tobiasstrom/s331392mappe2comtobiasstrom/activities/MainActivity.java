@@ -94,11 +94,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void startMeetingNotifyService() {
         //denne skal slå på servicen hver gang applikasjonen startes
-        Intent intent = new Intent(this, CycleService.class);
-        this.startService(intent);
-
-
-
+       //Intent intent = new Intent(this, CycleService.class);
+        // this.startService(intent);
+        Intent intent = new Intent();
+        intent.setAction("test");
+        sendBroadcast(intent);
 
     }
 

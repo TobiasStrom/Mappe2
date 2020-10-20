@@ -9,7 +9,6 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.services.CycleService;
 
 
 public class OnBootCompletedReceiver extends BroadcastReceiver {
-    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
         //Dersom broadcast receiver kjøres av moblien som slåss på, skal servisen slås på
