@@ -1,5 +1,10 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +27,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
-
+import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsRecyclerViewAdapter;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.contacts.ContactsFragment;
 
 
 import java.util.List;
@@ -94,9 +101,9 @@ public class NewContact extends AppCompatActivity {
         contact.setPhoneNumber(newPhoneNumber);
 
         db.addContacts(contact);
-        //her burde være noe som notifydatasetupdate, slik at listen i kontakter skulle oppdatere automatisk slik det skjer ved fjerning
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -122,7 +129,6 @@ public class NewContact extends AppCompatActivity {
         getActivity().finish();
     }
 
-     */
 
     public void wrongInput(){
         inputValidation = true;

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tobiasstrom.s331392mappe2comtobiasstrom">
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <uses-permission android:name="com.tobiasstrom.contentprovidermeetings.permission"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE">
@@ -14,7 +16,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.NewMeeting" />
+        <receiver android:name=".activities.OnBootCompletedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="test"/>
+            </intent-filter>
+        </receiver>
+        <service android:name=".services.MeetingNotifyService"/>
+        <service android:name=".services.CycleService"/>
+        <activity android:name=".activities.NewMeeting"></activity>
+
         <activity android:name=".activities.ContactDetailsActivity" />
         <activity android:name=".activities.NewContact" />
         <activity

@@ -182,6 +182,23 @@ public class NewMeeting extends AppCompatActivity {
             }
         }
 
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Bundle bundle = getIntent().getExtras();
+                if (bundle != null) {
+                    //oppdatere eksiterende møte
+                    updateMeeting(view);
+                } else {
+                    //create new instance
+                    saveMeetingToDB(view);
+
+                }
+            }
+        });
+
+
         txtDateStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { showDateDialog(txtDateStart, true);

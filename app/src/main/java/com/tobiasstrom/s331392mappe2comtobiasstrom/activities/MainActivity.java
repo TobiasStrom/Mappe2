@@ -1,16 +1,20 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.services.CycleService;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.services.MeetingNotifyService;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,6 +23,9 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -32,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        startMeetingNotifyService(); //starter servicen
+
         final FloatingActionsMenu fab = findViewById(R.id.fab);
         FloatingActionButton fabNewContact = findViewById(R.id.fabNewContact);
         FloatingActionButton fabNewMeeting = findViewById(R.id.fabNewMeting);
@@ -81,6 +90,16 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void startMeetingNotifyService() {
+        //denne skal slå på servicen hver gang applikasjonen startes
+       //Intent intent = new Intent(this, CycleService.class);
+        // this.startService(intent);
+        Intent intent = new Intent();
+        intent.setAction("test");
+        sendBroadcast(intent);
+
     }
 
 }
