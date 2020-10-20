@@ -24,6 +24,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
     private  int layoutResource;
     private  LayoutInflater layoutInflater;
     private List<Contact> contactItems;
+    private Contact contact;
 
     public ContactsRecyclerViewAdapter(Context context, List<Contact> contactItems) {
         this.context = context;
@@ -77,8 +78,9 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    Contact contact = contactItems.get(position);
+                    contact = contactItems.get(position);
                     Intent intent = new Intent(context, ContactDetailsActivity.class);
+                    intent.putExtra("id", contact.getContactId());
                     intent.putExtra("firstname", contact.getFirstName());
                     intent.putExtra("lastname", contact.getLastName());
                     intent.putExtra("phone", contact.getPhoneNumber());
@@ -95,9 +97,9 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
                 public boolean onLongClick(View view) {
                     //vis dialog om brukeren vil virkelig slette denne kontakten
                     final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-                    alertDialogBuilder.setTitle("Delete Contacts");
-                    alertDialogBuilder.setMessage("Do you want to delete this contact?");
-                    alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    alertDialogBuilder.setTitle(R.string.delete_contact);
+                    alertDialogBuilder.setMessage(R.string.delete_contact_text);
+                    alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             //Dersom brukeren ønsker seg å slette denne kontaktet
@@ -111,7 +113,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
                         }
                     });
-                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             //dersom brukeren ønsker seg ikke å slette denne kontakten
@@ -126,13 +128,30 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
             });
 
+            v.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Log.e(TAG, "onLongClick: Finker detter");
+                    return false;
+                }
+            });
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+
+                    Contact contact = contactItems.get(position);
+                    Intent intent = new Intent(context, ContactDetailsActivity.class);
+                    intent.putExtra("id", contact.getContactId());
+                    Log.e(TAG, "onClick: " + contact.getContactId() );
+                    intent.putExtra("firstname", contact.getFirstName());
+                    intent.putExtra("lastname", contact.getLastName());
+                    intent.putExtra("phone", contact.getPhoneNumber());
+                    intent.putExtra("email", contact.getEmail());
+                    context.startActivity(intent);
+                }
+            });
         }
-
-        //@Override
-
-
-
     }
-
-
 }

@@ -25,6 +25,7 @@ public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRe
     private Context context;
     private LayoutInflater layoutInflater;
     private List<Meeting> meetingItem;
+    private Meeting meeting;
 
     public MeetingsRecyclerViewAdapter(Context context, List<Meeting> meetingItem) {
         this.context = context;
@@ -81,7 +82,7 @@ public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRe
                 public void onClick(View view) {
                     int position = getAdapterPosition();
 
-                    Meeting meeting = meetingItem.get(position);
+                    meeting = meetingItem.get(position);
                     Intent intent = new Intent(context, NewMeeting.class);
                     Log.e(TAG, "onClick: boi" + meeting.getMetingId() );
                     intent.putExtra("meeting_id", String.valueOf(meeting.getMetingId()));
@@ -98,9 +99,9 @@ public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRe
                 @Override
                 public boolean onLongClick(View view) {
                     final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-                    alertDialogBuilder.setTitle("Delete Meeting");
-                    alertDialogBuilder.setMessage("Do you want to delete this meeting?");
-                    alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    alertDialogBuilder.setTitle(R.string.delete_meeting);
+                    alertDialogBuilder.setMessage(R.string.delete_meeting_text);
+                    alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             //dersom brukeren ønsker seg å slette denne møten
@@ -113,7 +114,7 @@ public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRe
                             notifyItemRemoved(position);
                         }
                     });
-                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             //do nothing
