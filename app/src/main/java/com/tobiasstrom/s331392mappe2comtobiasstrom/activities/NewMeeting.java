@@ -1,11 +1,8 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -19,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -38,7 +34,6 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.util.Constants;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -161,7 +156,7 @@ public class NewMeeting extends AppCompatActivity {
         selected = new boolean[contacts.size()]; //array som inneholder inforamsjon om hvilken verdier burde være checked i dialogen
 
         if (id != 0) { //dersom det skal oppdateres en møte
-            List<Integer> contactsInMeeting = db.getContatctIdInMeeting(id); //henter de som er i en møte allerede
+            List<Integer> contactsInMeeting = db.getContatcsIdInMeeting(id); //henter de som er i en møte allerede
             for (int i = 0; i < participants.length; i++) { //skaper array med navn og array med valgte elementer for dialogbox
                 participants[i] = contacts.get(i).getFirstName() + " " + contacts.get(i).getLastName();
                 int id = contacts.get(i).getContactId();

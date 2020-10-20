@@ -44,4 +44,7 @@ public class Constants {
 
 
     public static ArrayList<Integer> selectedItems;
+
+    //permissions
+
 }
