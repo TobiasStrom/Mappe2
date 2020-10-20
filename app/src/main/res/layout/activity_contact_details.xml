@@ -7,44 +7,62 @@
     tools:context=".activities.ContactDetailsActivity">
 
     <Toolbar
+        android:id="@+id/toolbar2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="69dp"
+        tools:layout_editor_absoluteY="-115dp">
 
     </Toolbar>
-
-    <TextView
-        android:id="@+id/txtDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.120000005" />
 
     <EditText
         android:id="@+id/txtUpdateFirstname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDetails" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.24000001" />
+
+    <TextView
+        android:id="@+id/txtErrorFirstname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textColor="@color/red"
+        app:layout_constraintStart_toStartOf="@+id/txtUpdateFirstname"
+        app:layout_constraintTop_toBottomOf="@+id/txtUpdateFirstname" />
 
     <EditText
         android:id="@+id/txtUpdateLastname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUpdateFirstname" />
+        app:layout_constraintTop_toBottomOf="@+id/txtErrorFirstname" />
+
+    <TextView
+        android:id="@+id/txtErrorLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textColor="@color/red"
+        app:layout_constraintStart_toStartOf="@+id/txtUpdateLastname"
+        app:layout_constraintTop_toBottomOf="@+id/txtUpdateLastname" />
 
     <EditText
         android:id="@+id/txtUpdateEmail"
@@ -55,16 +73,38 @@
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUpdateLastname" />
+        app:layout_constraintTop_toBottomOf="@+id/txtErrorLastName" />
+
+    <TextView
+        android:id="@+id/txtErrorMail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textColor="@color/red"
+        app:layout_constraintStart_toStartOf="@+id/txtUpdateEmail"
+        app:layout_constraintTop_toBottomOf="@+id/txtUpdateEmail" />
 
     <EditText
         android:id="@+id/txtUpdatePhoneNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUpdateEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtErrorMail" />
+
+    <TextView
+        android:id="@+id/txtErrorPhonenumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textColor="@color/red"
+        app:layout_constraintStart_toStartOf="@+id/txtUpdatePhoneNumber"
+        app:layout_constraintTop_toBottomOf="@+id/txtUpdatePhoneNumber" />
 </androidx.constraintlayout.widget.ConstraintLayout>

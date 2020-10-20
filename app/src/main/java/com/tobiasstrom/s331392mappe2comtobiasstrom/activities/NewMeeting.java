@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,15 +22,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Meeting;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsInMeetingRecyclerViewAdapter;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.util.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,7 +59,7 @@ public class NewMeeting extends AppCompatActivity {
     private TextView txtTimeEnd;
     private EditText txtInputPlace;
     private EditText txtInputType;
-    private Button btnAddParticipant;
+    private ImageButton btnAddParticipant;
     private ListView tvParticipant;
     private List<Contact> contactList;
     private List<Contact> listItem;
@@ -77,7 +81,7 @@ public class NewMeeting extends AppCompatActivity {
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     
-    private ArrayList<Integer> selectedItems;
+
     private String[] participants;
     private boolean[] selected;
     List<Contact> contacts;
@@ -102,7 +106,7 @@ public class NewMeeting extends AppCompatActivity {
         txtTimeEnd = (TextView) findViewById(R.id.txtTimeEnd);
         txtInputPlace = (EditText) findViewById(R.id.txtInputPlace);
         txtInputType = (EditText) findViewById(R.id.txtIputType);
-        btnAddParticipant = (Button) findViewById(R.id.btnAddParticipant);
+        btnAddParticipant = (ImageButton) findViewById(R.id.btnAddParticipant);
         Log.d(TAG, "onCreate: before bunde check");
 
 
@@ -146,7 +150,7 @@ public class NewMeeting extends AppCompatActivity {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             toolbar.setTitle(getText(R.string.newMeeting));
-
+            dateStart = calendar.getTime();
             String dateDate = dateFormat.format(calendar.getTime());
             txtDateStart.setText(dateDate);
             txtDateEnd.setText(dateDate);
@@ -154,6 +158,7 @@ public class NewMeeting extends AppCompatActivity {
             Log.e(TAG, "onCreate: " + time );
             txtTimeStart.setText(time);
             calendar.add(Calendar.MINUTE, 30);
+            dateEnd = calendar.getTime();
             time = timeFormat.format(calendar.getTime());
             txtTimeEnd.setText(time);
         }
@@ -207,6 +212,7 @@ public class NewMeeting extends AppCompatActivity {
                 //skaper dialog ved hjelp av onCreateDialog metode
                 Dialog dialog = onCreateDialog(savedInstanceState);
                 dialog.show();
+                Log.e(TAG, "onClick: " + Constants.selectedItems.size());
             }
         });
     }
@@ -305,9 +311,9 @@ public class NewMeeting extends AppCompatActivity {
 
         db.addMeeting(meeting);
 
-        if (selectedItems != null) {
+        if (Constants.selectedItems != null) {
             int id = db.getLastMeeting().getMetingId(); //dette spår om hvilken id skal denne møten få i databasen, dette er sikkelig yikes men fungerer for nå
-            for (Integer i : selectedItems) {//looper gjennom nye verdier
+            for (Integer i : Constants.selectedItems) {//looper gjennom nye verdier
                 db.addContactToMeeting(id, contacts.get(i).getContactId());
             }
 
@@ -332,11 +338,11 @@ public class NewMeeting extends AppCompatActivity {
 
         db.updateMeeting(meeting);
 
-        if (selectedItems != null) {
+        if (Constants.selectedItems != null) {
 
             db.deleteContactsFromMeeting(id);//nullstille hvem som er knyttet til denne møte
 
-            for (Integer i : selectedItems) { //loope gjennom nye verdier
+            for (Integer i : Constants.selectedItems) { //loope gjennom nye verdier
                 db.addContactToMeeting(id, contacts.get(i).getContactId());
             }
             for (int i = 0; i < selected.length; i++) { //loope gjennom verdier som er satt fra før
@@ -387,10 +393,10 @@ public class NewMeeting extends AppCompatActivity {
     //https://developer.android.com/guide/topics/ui/dialogs#java
     //dette skaper en dialog med en multichoice list og lagrer valgte elementer til selectedItems arrayList<Integer>
     private Dialog onCreateDialog(Bundle savedInstanceState) {
-        selectedItems = new ArrayList<Integer>();  // Where we track the selected items
+        Constants.selectedItems = new ArrayList<Integer>();  // Where we track the selected items
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Set the dialog title
-        builder.setTitle("Choose participants")
+        builder.setTitle(R.string.chooseParticipants)
                 // Specify the list array, the items to be selected by default (null for none),
                 // and the listener through which to receive callbacks when items are selected
                 .setMultiChoiceItems(participants, selected,
@@ -400,22 +406,23 @@ public class NewMeeting extends AppCompatActivity {
                                                 boolean isChecked) {
                                 if (isChecked) {
                                     // If the user checked the item, add it to the selected items
-                                    selectedItems.add(which);
-                                } else if (selectedItems.contains(which)) {
+                                    Constants.selectedItems.add(which);
+                                } else if (Constants.selectedItems.contains(which)) {
                                     // Else, if the item is already in the array, remove it
-                                    selectedItems.remove(Integer.valueOf(which));
+                                    Constants.selectedItems.remove(Integer.valueOf(which));
                                 }
                             }
                         })
                 // Set the action buttons
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK, so save the selectedItems results somewhere
                         // or return them to the component that opened the dialog
+                        Log.e(TAG, "onClick: " + Constants.selectedItems.size());
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                     }
@@ -433,14 +440,33 @@ public class NewMeeting extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (!newMeeting) {
-            //oppdatere eksiterende møte
-            updateMeeting();
-        } else {
-            //create new instance
-            saveMeetingToDB();
-            Log.e(TAG, "onClick:  lagt til en møte" );
-
+        if (txtInputType.getText().toString().isEmpty() || txtInputPlace.getText().toString().isEmpty()){
+            int duration = Toast.LENGTH_LONG;
+            Context context = getApplicationContext();
+            Toast toast = Toast.makeText(context, R.string.meetingEmty, duration);
+            toast.show();
+        }
+        else {
+            if(dateStart.before(dateEnd)){
+                txtTimeEnd.setTextColor(getResources().getColor(R.color.black));
+                txtDateEnd.setTextColor(getResources().getColor(R.color.black));
+                if (!newMeeting) {
+                    //oppdatere eksiterende møte
+                    updateMeeting();
+                } else {
+                    //create new instance
+                    saveMeetingToDB();
+                    Log.e(TAG, "onClick:  lagt til en møte" );
+                }
+            }
+            else {
+                txtTimeEnd.setTextColor(getResources().getColor(R.color.red));
+                txtDateEnd.setTextColor(getResources().getColor(R.color.red));
+                int duration = Toast.LENGTH_LONG;
+                Context context = getApplicationContext();
+                Toast toast = Toast.makeText(context, R.string.wrong_date, duration);
+                toast.show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
