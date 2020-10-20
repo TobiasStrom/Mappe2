@@ -108,7 +108,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Constants.KEY_CONTACT_EMAIL, contact.getEmail());
 
         return db.update(Constants.TABLE_CONTACT, values, Constants.KEY_CONTACT_ID + " =?" , new String[]{String.valueOf(contact.getContactId())});
-
     }
 
     //get all meeting
@@ -152,7 +151,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         //db.close();
         return ant;
-
     }
 
     public void deleteContactsFromMeeting(int id) {
@@ -167,8 +165,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.delete(Constants.TABLE_MEETING, Constants.KEY_MEETING_ID + " =? ", new String[]{String.valueOf(id)});
         //slettes rekord fra combo tabell
         db.delete(Constants.TABLE_COMBO, Constants.KEY_MEETINGTBL_ID + " =? ", new String[]{String.valueOf(id)});
-
-
     }
 
     public void addMeeting(Meeting meeting){
@@ -305,6 +301,4 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return contactsList;
         //select customerTBL.customer_firsname from customerTBl cross join comboTBL on customerTBL.id = comboTBL.customerTBl_id  where comboTBL.meetingTBL_id =1;
     }
-
-
 }
