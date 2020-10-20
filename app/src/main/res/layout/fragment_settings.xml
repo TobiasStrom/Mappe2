@@ -17,12 +17,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Switch
-            android:id="@+id/switch2"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/smsService"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="SMS service" />
+            android:checked="true"
+            android:text="@string/smsService" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <EditText
+            android:id="@+id/customSmsMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/smsMessage"
+            android:inputType="textMultiLine"
+            android:importantForAutofill="no" />
 
         <View
             android:id="@+id/divider"
@@ -35,8 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:onClick="setSmsSendTime"
-            android:text="SMS send time" />
+            android:text="@string/setSmsTime"
+            tools:visibility="visible" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

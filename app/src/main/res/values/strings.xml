@@ -51,5 +51,8 @@
     <string name="wrong_date">Slutttid må være etter starttid</string>
     <string name="meetingEmty">Du må fylle alle felt</string>
     <string name="add">Legg til</string>
+    <string name="setSmsTime">Velg tiden sms sendes</string>
+    <string name="smsMessage">Skriv sms melding</string>
+    <string name="smsService">Send sms til deltagere</string>
 
 </resources>

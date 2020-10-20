@@ -170,8 +170,6 @@ public class NewMeeting extends AppCompatActivity {
             }
         }
 
-
-
         txtDateStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { showDateDialog(txtDateStart, true);

@@ -93,12 +93,9 @@ public class MainActivity extends AppCompatActivity {
         // this.startService(intent);
         int myPermissionsRequestSendSms = ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
 
-        if (myPermissionsRequestSendSms != 0) {
+        if (myPermissionsRequestSendSms != 0) { //sjekker om applikasjonen har permission til å sende sms, hvis ikke så skal det spørs om det
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS},0);
         }
-
-
-
 
         Intent intent = new Intent();
         intent.setAction("test");
