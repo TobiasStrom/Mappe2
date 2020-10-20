@@ -129,6 +129,8 @@ public class NewContact extends AppCompatActivity {
         getActivity().finish();
     }
 
+     */
+
 
     public void wrongInput(){
         inputValidation = true;

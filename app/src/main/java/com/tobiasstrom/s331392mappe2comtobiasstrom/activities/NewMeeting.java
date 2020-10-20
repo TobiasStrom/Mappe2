@@ -43,8 +43,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
-
 public class NewMeeting extends AppCompatActivity {
 
     private DatabaseHandler db;
@@ -80,13 +78,9 @@ public class NewMeeting extends AppCompatActivity {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
-    
-
     private String[] participants;
     private boolean[] selected;
     List<Contact> contacts;
-
-
 
     View root;
 
@@ -131,7 +125,6 @@ public class NewMeeting extends AppCompatActivity {
                 e.printStackTrace();
             }
             try {
-
                 dateEnd=new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(newMeetingEnd);
                 dateEndFormat = dateFormat.format(dateEnd.getTime());
                 timeEndFormat = timeFormat.format(dateEnd.getTime());
@@ -182,21 +175,6 @@ public class NewMeeting extends AppCompatActivity {
             }
         }
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final Bundle bundle = getIntent().getExtras();
-                if (bundle != null) {
-                    //oppdatere eksiterende møte
-                    updateMeeting(view);
-                } else {
-                    //create new instance
-                    saveMeetingToDB(view);
-
-                }
-            }
-        });
 
 
         txtDateStart.setOnClickListener(new View.OnClickListener() {
