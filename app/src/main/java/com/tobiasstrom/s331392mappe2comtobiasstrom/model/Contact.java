@@ -1,5 +1,5 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.model;
-
+//Kontakt klassen
 public class Contact {
     private String firstName;
     private String lastName;
@@ -51,5 +51,10 @@ public class Contact {
     }
     public void setContactId(int contactId) {
         this.contactId = contactId;
+    }
+
+    @Override
+    public String toString() {
+        return  firstName  + " " + lastName;
     }
 }

@@ -23,8 +23,6 @@ public class CycleService extends Service {
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent1, 0);
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60 * 1000, pendingIntent);
-
         return super.onStartCommand(intent,flags,startId);
-
     }
 }

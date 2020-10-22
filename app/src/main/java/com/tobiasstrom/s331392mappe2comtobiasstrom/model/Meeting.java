@@ -2,7 +2,7 @@ package com.tobiasstrom.s331392mappe2comtobiasstrom.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+//Møte klassen
 public class Meeting {
 
     private String meeting_start;

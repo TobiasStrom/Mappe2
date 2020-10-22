@@ -17,16 +17,15 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 
 import java.util.List;
-
+//Trenger denne klassen får å kunne legge inn den informsjonen som vi trenger i recyclerview
+//På den måten jeg ønsker
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRecyclerViewAdapter.ViewHolder> {
     private static final String TAG = "ContactsListViewAdapter";
+    //opprette de variablene vi trenger
     private Context context;
-    //private Context context;
-    private  int layoutResource;
-    private  LayoutInflater layoutInflater;
     private List<Contact> contactItems;
     private Contact contact;
-
+    //Konstruktør
     public ContactsRecyclerViewAdapter(Context context, List<Contact> contactItems) {
         this.context = context;
         this.contactItems = contactItems;
@@ -40,7 +39,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
         return new ViewHolder(view, context);
     }
-
+    //Setter teksten ut i viewene
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Contact contact = contactItems.get(position);
@@ -54,7 +53,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
     public int getItemCount() {
         return contactItems.size();
     }
-
+    //Trenger denne får å hente ut alle ViewIndexene som vi trenger få å setet inn.
     public class ViewHolder extends RecyclerView.ViewHolder {
         final TextView tvTxtFirstName;
         final TextView tvTxtLastName;
@@ -129,30 +128,6 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
             });
 
-            v.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    Log.e(TAG, "onLongClick: Finker detter");
-                    return false;
-                }
-            });
-
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-
-                    Contact contact = contactItems.get(position);
-                    Intent intent = new Intent(context, ContactDetailsActivity.class);
-                    intent.putExtra("id", contact.getContactId());
-                    Log.e(TAG, "onClick: " + contact.getContactId() );
-                    intent.putExtra("firstname", contact.getFirstName());
-                    intent.putExtra("lastname", contact.getLastName());
-                    intent.putExtra("phone", contact.getPhoneNumber());
-                    intent.putExtra("email", contact.getEmail());
-                    context.startActivity(intent);
-                }
-            });
         }
     }
 }

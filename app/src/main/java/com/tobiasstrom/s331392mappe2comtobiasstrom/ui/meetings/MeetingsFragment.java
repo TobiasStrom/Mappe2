@@ -1,33 +1,32 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.ui.meetings;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
-import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Meeting;
-import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsRecyclerViewAdapter;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.MeetingsRecyclerViewAdapter;
-import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.contacts.ContactsViewModel;
 
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+
+
 public class MeetingsFragment extends Fragment {
-    
+    private static final String TAG = "MeetingsFragment";
     private MeetingsRecyclerViewAdapter recyclerViewAdapter;
     private List<Meeting> meetingList;
     private DatabaseHandler db;
@@ -37,27 +36,16 @@ public class MeetingsFragment extends Fragment {
 
         db = new DatabaseHandler(container.getContext());
 
-        /*if (db.getMeetingCount() == 0 ){
-            root = inflater.inflate(R.layout.fragment_no_meetings, container, false);
-        } else {
-            root = inflater.inflate(R.layout.fragment_meetings, container, false);
+        if (db.getMeetingCount() == 0 ){
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(this.getContext(), R.string.noMeeting, duration);
+            toast.setGravity(Gravity.CENTER, 0, -150);
+            toast.show();
+        }
 
-            recyclerView = root.findViewById(R.id.recyclerViewMeetingID);
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-
-            meetingList = db.getAllMeetings();
-
-            recyclerViewAdapter = new MeetingsRecyclerViewAdapter(container.getContext(), meetingList);
-            recyclerView.setAdapter(recyclerViewAdapter);
-
-        }*/
-
-        //Dette gjør at rooten er altid attached slik at den viser møte listen.
-        //Dersom den blir ikke attached i tilfelde hvor det er ingen møte, etter at den første møte er opprettet er det umulig å vise den (fordi listen er ikke attached)
-        //etter at ny møte har blitt opprettet kjøres det kun onresume som ikke har tilgang til inflater.
+        //Setter root til fragmet_meeting
         root = inflater.inflate(R.layout.fragment_meetings, container, false);
-
+        //Oprpetter recyklerview
         RecyclerView recyclerView = root.findViewById(R.id.recyclerViewMeetingID);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
@@ -67,24 +55,31 @@ public class MeetingsFragment extends Fragment {
         recyclerViewAdapter = new MeetingsRecyclerViewAdapter(container.getContext(), meetingList);
         recyclerView.setAdapter(recyclerViewAdapter);
 
+        //Skjker om teksten skal være rød og at møte er feridg.
+        Date date;
+        int teller = 0;
+        final Calendar calendar = Calendar.getInstance();
+        for (Meeting meeting : meetingList){
+            try {
+                date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(meeting.getMeeting_start());
+                if(date.before(calendar.getTime())){
+                    teller++;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
+        }
+        recyclerView.getLayoutManager().scrollToPosition(teller);
         return root;
     }
 
     @Override
     public void onResume() {
-
-        //her forventes det at meetingList og recyclerViewAdapter skapes uansett hva i onCreateView
-        if (meetingList.size() < db.getAllMeetings().size()) { //dersom det er flere møter inn i db enn det vises
-            //meetingList.add(db.getAllMeetings().get(0)); //legg til den manglende møte (dette vil ikke sortere nye verdien)
-
-            //populate arrayet på nytt dersom listen med møter som hentes er sorter
-            meetingList.clear();
-            meetingList.addAll(db.getAllMeetings());
-            recyclerViewAdapter.notifyDataSetChanged();
-        }
-
+        //Oppdaterer recyclerview
+        meetingList.clear();
+        meetingList.addAll(db.getAllMeetings());
+        recyclerViewAdapter.notifyDataSetChanged();
         super.onResume();
-
     }
 }

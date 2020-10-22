@@ -25,6 +25,7 @@ public class ContentProviderHandeler extends ContentProvider {
         DatabaseHelper(Context context) {
             super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
         }
+        //Oppretter databasene
         @Override
         public void onCreate(SQLiteDatabase db) {
             String CREATE_CONTACTS_TABLE = "CREATE TABLE " + Constants.TABLE_CONTACT + " (" +
@@ -59,6 +60,7 @@ public class ContentProviderHandeler extends ContentProvider {
             db.execSQL(CREATE_MEETING_TABLE);
             db.execSQL(CREATE_COMBO_TABLE);
         }
+        //Hvis det skulle være en oppdatering av databsene.
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_CONTACT);
@@ -75,6 +77,7 @@ public class ContentProviderHandeler extends ContentProvider {
         db = DBhelper.getWritableDatabase();
         return true;
     }
+    //Skjekker om typen stemme.
     @Override
     public String getType(Uri uri) {
         switch (Constants.uriMatcher.match(uri)) {
@@ -87,6 +90,7 @@ public class ContentProviderHandeler extends ContentProvider {
                         IllegalArgumentException("Ugyldig URI" + uri);
         }
     }
+    //legger til dataen
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         SQLiteDatabase db = DBhelper.getWritableDatabase();
@@ -102,16 +106,16 @@ public class ContentProviderHandeler extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Cursor cur = null;
-        if (Constants.uriMatcher.match(uri) == Constants.CONTAKT) {
+        Cursor cur;
+        if (Constants.uriMatcher.match(uri) == Constants.CONTAKT) {//Henter ut en kontakt
             cur = db.query(Constants.TABLE_CONTACT, projection, Constants.KEY_CONTACT_ID + "=" + uri.getPathSegments().get(1), selectionArgs, null, null, sortOrder);
             return cur;
-        } else {
+        } else {//Henter ut alle kontakter
             cur = db.query(Constants.TABLE_CONTACT, null, null, null, null, null, null);
             return cur;
         }
     }
-
+    //Må ha de men trenger de ikke
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         return 0;

@@ -21,24 +21,28 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Meeting;
 
 import java.util.List;
-
+//Trenger denne klassen får å kunne legge inn den informsjonen som vi trenger i recyclerview
+//På den måten jeg ønsker
 public class ContactsInMeetingRecyclerViewAdapter extends ArrayAdapter {
     private static final String TAG = "ContactsInMeetingRecycl";
+    //opprette de variablene vi trenger
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
     private List<Contact> applications;
 
+    //Konstruktør
     public ContactsInMeetingRecyclerViewAdapter(@NonNull Context context, int resource, List<Contact> applications) {
         super(context, resource);
         this.layoutResource = resource;
         this.layoutInflater = LayoutInflater.from(context);
         this.applications = applications;
     }
-
+    //Må teller hvor mange objekter det er får å kunne opprette recyclerview
     public int getCount() {
         return applications.size();
     }
 
+    //Henter view vi trenger få å kunne bruke riktg viewlist
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -51,12 +55,13 @@ public class ContactsInMeetingRecyclerViewAdapter extends ArrayAdapter {
         } else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        //Setter infoen jeg øsker å vise i listview
         viewHolder.tvTxtLastNameMeeting.setText(contact.getFirstName());
         viewHolder.tvTxtFirstNameMeeting.setText(contact.getLastName());
 
         return convertView;
     }
-
+    //Trenger denne får å hente ut alle ViewIndexene som vi trenger få å setet inn.
     public class ViewHolder{
         final TextView tvTxtFirstNameMeeting;
         final TextView tvTxtLastNameMeeting;

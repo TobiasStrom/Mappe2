@@ -127,6 +127,7 @@ public class MeetingNotifyService extends Service {
             for (Contact contact : contacts) {
                 String message = getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("smsMessage", "Du er invitert ti et møte");
                 SmsManager smsManager = SmsManager.getDefault();
+              
                 //contact.getPhoneNumber();
                 smsManager.sendTextMessage("5554", null, message, null, null); // TODO: 22.10.2020 endre destinasjonAddresset til kontaktens tlf nummer
             }
