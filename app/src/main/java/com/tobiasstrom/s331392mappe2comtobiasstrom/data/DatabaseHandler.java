@@ -322,15 +322,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 contact.setPhoneNumber(cursor.getString(3));
                 contact.setEmail(cursor.getString(4));
                 contactsList.add(contact);
-                /*contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_ID))));
-                contact.setFirstName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_FIRSTNAME)));
-                contact.setLastName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_LASTNAME)));
-                contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_PHONENUMBER)));
-                contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));*/
             }while (cursor.moveToNext());
         }
         cursor.close();
         return contactsList;
-
     }
 }
