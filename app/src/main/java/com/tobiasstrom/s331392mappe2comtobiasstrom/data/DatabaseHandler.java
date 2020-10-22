@@ -220,7 +220,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //db.close();
     }
 
-    public List<Integer> getContatctIdInMeeting(int meetingID) {
+    public List<Integer> getContatcsIdInMeeting(int meetingID) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Integer> contactId = new ArrayList<>();
         //select * from comboTBL where meetingTBL_ID = id;
@@ -243,25 +243,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<Contact> getContactInMeeting(int meetingID){
         SQLiteDatabase db = this.getReadableDatabase();
         List<Contact> contactsList = new ArrayList<>();
-        String findPersonInMeeting = "SELECT *" +
-                " FROM "+ Constants.TABLE_CONTACT + " CROSS JOIN " + Constants.TABLE_COMBO + " ON "+ Constants.TABLE_CONTACT+"."+ Constants.KEY_CONTACT_ID + " = "+ Constants.TABLE_COMBO + "." + Constants.KEY_CONTACTTBL_ID +
-                " WHERE "+ Constants.TABLE_COMBO+ "."+ Constants.KEY_MEETINGTBL_ID + " = " + meetingID + ";";
+        String findPersonInMeeting = "SELECT * FROM " + Constants.TABLE_COMBO +
+                " INNER JOIN " + Constants.TABLE_CONTACT +
+                " ON " + Constants.TABLE_COMBO + "." + Constants.KEY_CONTACTTBL_ID + " = " + Constants.TABLE_CONTACT + "." + Constants.KEY_CONTACT_ID +
+                " WHERE " + Constants.TABLE_COMBO + "." + Constants.KEY_MEETINGTBL_ID + " = " + meetingID + ";";
 
         Cursor cursor = db.rawQuery(findPersonInMeeting, null);
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()){
             do {
                 Contact contact = new Contact();
-                contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_ID))));
-                contact.setFirstName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_FIRSTNAME)));
-                contact.setLastName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_LASTNAME)));
-                contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_PHONENUMBER)));
-                contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));
+                contact.setContactId(Integer.parseInt(cursor.getString(2))); //starter fra andre kollone dersom de førse to gjelder comboTBL (inner join + select *)
+                contact.setFirstName(cursor.getString(3));
+                contact.setLastName(cursor.getString(4));
+                contact.setPhoneNumber(cursor.getString(5));
+                contact.setEmail(cursor.getString(6));
 
+                //contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_ID))));
+                //contact.setFirstName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_FIRSTNAME)));
+                //contact.setLastName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_LASTNAME)));
+                //contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_PHONENUMBER)));
+                //contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));
+                contactsList.add(contact);
 
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
-        //db.close();
+        db.close();
         return contactsList;
         //select customerTBL.customer_firsname from customerTBl cross join comboTBL on customerTBL.id = comboTBL.customerTBl_id  where comboTBL.meetingTBL_id =1;
     }
