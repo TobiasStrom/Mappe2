@@ -5,8 +5,7 @@
     <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <uses-permission android:name="com.tobiasstrom.contentprovidermeetings.permission"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE">
-    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <permission android:name="com.tobiasstrom.contentprovidermeetings.permission"/>
 
     <application
@@ -19,12 +18,12 @@
         <receiver android:name=".activities.OnBootCompletedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="test"/>
+                <action android:name="com.tobiasstrom.action.ON_APP_CREATED"/>
             </intent-filter>
         </receiver>
         <service android:name=".services.MeetingNotifyService"/>
-        <service android:name=".services.CycleService"/>
-        <activity android:name=".activities.NewMeeting"></activity>
+        <service android:name=".services.CycleService" />
+        <activity android:name=".activities.NewMeeting"/>
 
         <activity android:name=".activities.ContactDetailsActivity" />
         <activity android:name=".activities.NewContact" />

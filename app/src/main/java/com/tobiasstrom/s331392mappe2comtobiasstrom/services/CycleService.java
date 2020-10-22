@@ -21,10 +21,6 @@ public class CycleService extends Service {
 
         Intent intent1 = new Intent(this, MeetingNotifyService.class);
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent1, 0);
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 7);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 1);
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60 * 1000, pendingIntent);
         return super.onStartCommand(intent,flags,startId);

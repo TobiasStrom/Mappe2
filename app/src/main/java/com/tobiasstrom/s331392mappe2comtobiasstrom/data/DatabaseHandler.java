@@ -239,6 +239,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
+  
     //Henter ut id til kontaktene i møte.
     public List<Integer> getContatctIdInMeeting(int meetingID) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -262,25 +263,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<Contact> getContactInMeeting(int meetingID){
         SQLiteDatabase db = this.getReadableDatabase();
         List<Contact> contactsList = new ArrayList<>();
-        String findPersonInMeeting = "SELECT *" +
-                " FROM "+ Constants.TABLE_CONTACT + " CROSS JOIN " + Constants.TABLE_COMBO + " ON "+ Constants.TABLE_CONTACT+"."+ Constants.KEY_CONTACT_ID + " = "+ Constants.TABLE_COMBO + "." + Constants.KEY_CONTACTTBL_ID +
-                " WHERE "+ Constants.TABLE_COMBO+ "."+ Constants.KEY_MEETINGTBL_ID + " = " + meetingID + ";";
+        String findPersonInMeeting = "SELECT * FROM " + Constants.TABLE_COMBO +
+                " INNER JOIN " + Constants.TABLE_CONTACT +
+                " ON " + Constants.TABLE_COMBO + "." + Constants.KEY_CONTACTTBL_ID + " = " + Constants.TABLE_CONTACT + "." + Constants.KEY_CONTACT_ID +
+                " WHERE " + Constants.TABLE_COMBO + "." + Constants.KEY_MEETINGTBL_ID + " = " + meetingID + ";";
 
         Cursor cursor = db.rawQuery(findPersonInMeeting, null);
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()){
             do {
                 Contact contact = new Contact();
+
                 contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_ID))));
                 contact.setFirstName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_FIRSTNAME)));
                 contact.setLastName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_LASTNAME)));
                 contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_PHONENUMBER)));
                 contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));
+
+
                 contactsList.add(contact);
 
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
-
         return contactsList;
 
     }

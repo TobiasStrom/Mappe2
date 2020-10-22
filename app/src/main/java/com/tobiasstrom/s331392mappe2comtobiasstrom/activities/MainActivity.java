@@ -1,21 +1,20 @@
 package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
-
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.material.navigation.NavigationView;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.services.CycleService;
-import com.tobiasstrom.s331392mappe2comtobiasstrom.services.MeetingNotifyService;
 
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -23,9 +22,6 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -101,11 +97,17 @@ public class MainActivity extends AppCompatActivity {
     //denne skal slå på servicen hver gang applikasjonen startes
     public void startMeetingNotifyService() {
 
-        //Intent intent = new Intent(this, CycleService.class);
-        // this.startService(intent);
+        //denne skal slå på servicen hver gang applikasjonen startes
+        int myPermissionsRequestSendSms = ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+
+        if (myPermissionsRequestSendSms != 0) { //sjekker om applikasjonen har permission til å sende sms, hvis ikke så skal det spørs om det
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS},0);
+        }
         Intent intent = new Intent();
-        intent.setAction("test");
+        intent.setAction("com.tobiasstrom.action.ON_APP_CREATED");
         sendBroadcast(intent);
+        //Intent intent = new Intent(this, CycleService.class);
+        //this.startService(intent);
 
     }
 
