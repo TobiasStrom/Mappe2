@@ -95,7 +95,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return contactList;
     }
 
-    //TODO: Tenges nok ikke
     //Henter ut antall kontakter som brukers til å srive ut
     public int getContactCount(){
         String countQuery = "SELECT * FROM " + Constants.TABLE_CONTACT;
