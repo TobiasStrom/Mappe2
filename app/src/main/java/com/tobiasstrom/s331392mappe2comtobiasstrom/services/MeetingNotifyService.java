@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MeetingNotifyService extends Service {
+    private static final String TAG = "MeetingNotifyService";
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -35,7 +36,7 @@ public class MeetingNotifyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        int sendNotificationHour = 8; //dette er tiden notifikasjonen skal komme opp i døynet
+        int sendNotificationHour = 7; //dette er tiden notifikasjonen skal komme opp i døynet
 
         //hente lagret verdier fra sharedpreferences eller definere default verdier dersom verdier fantes ikke i sharedpreferences
         boolean smsServiceOn = getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getBoolean("smsServiceIsOn", false); //burde gi false verdi som deafult verdi
@@ -119,7 +120,7 @@ public class MeetingNotifyService extends Service {
         }
     }
 
-    private void sendMessages (Calendar calendar) { //dette viser seg til å ikke fungere
+    private void sendMessages (Calendar calendar) {
         int myPermissionsRequestSendSms = ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
 
         if (myPermissionsRequestSendSms == PackageManager.PERMISSION_GRANTED) { //dersom applikasjonen har permission til å sende sms
@@ -129,7 +130,8 @@ public class MeetingNotifyService extends Service {
                 SmsManager smsManager = SmsManager.getDefault();
               
                 //contact.getPhoneNumber();
-                smsManager.sendTextMessage("5554", null, message, null, null); // TODO: 22.10.2020 endre destinasjonAddresset til kontaktens tlf nummer
+                //smsManager.sendTextMessage(contact.getPhoneNumber(), null, message, null, null); // TODO: 22.10.2020 endre destinasjonAddresset til kontaktens tlf nummer
+                Log.e(TAG, "Send meldig til " + contact.getFirstName() + " med telefonmr " + contact.getPhoneNumber() );
             }
 
         }

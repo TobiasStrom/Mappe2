@@ -37,6 +37,7 @@ public class SettingsFragment extends Fragment {
     EditText customSmsMessage;
     SwitchCompat smsServiceSwitch;
     Button setSmsTime;
+    TextView txtSettingsTime;
 
     boolean smsServiceIsOn;
     String smsMessage;
@@ -50,10 +51,11 @@ public class SettingsFragment extends Fragment {
         customSmsMessage = root.findViewById(R.id.customSmsMessage);
         smsServiceSwitch = root.findViewById(R.id.smsService);
         setSmsTime = root.findViewById(R.id.SmsTimeButton);
+        txtSettingsTime = root.findViewById(R.id.txtSettingsTime);
 
         //hente verdier fra sharedpreferences, dersom de fantes ikke, skal deault verdier plasseres
         smsServiceIsOn = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getBoolean("smsServiceIsOn", false);
-        smsMessage = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("smsMessage", "Du er invitert ti et møte");
+        smsMessage = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("smsMessage", "Du er invitert til et møte");
         smsSendTimeHour = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getInt("smsSendTimeHour", 0);
         smsSendTimeMinutes = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getInt("smsSendTimeMinutes", 0);
 
@@ -71,6 +73,7 @@ public class SettingsFragment extends Fragment {
                 setSmsTime.setEnabled(b); //elementet justeres ut av parent setting
             }
         });
+        setTime();
 
         setSmsTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +83,8 @@ public class SettingsFragment extends Fragment {
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
                         smsSendTimeHour = i; //oppdatere ints som skal bli lagret til share preferences
                         smsSendTimeMinutes = i1;
+                        setTime();
+
                     }
                 };
                 new TimePickerDialog(getActivity(), timePicker, smsSendTimeHour, smsSendTimeMinutes,true).show();
@@ -106,6 +111,22 @@ public class SettingsFragment extends Fragment {
         this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putString("smsMessage", customSmsMessage.getText().toString()).apply();
         this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putInt("smsSendTimeHour", smsSendTimeHour).apply();
         this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putInt("smsSendTimeMinutes", smsSendTimeMinutes).apply();
+    }
+
+    public void setTime(){
+        if (smsSendTimeMinutes<10){
+            if(smsSendTimeHour<10){
+                txtSettingsTime.setText("0"+smsSendTimeHour+":0"+smsSendTimeMinutes);
+            }else{
+                txtSettingsTime.setText(smsSendTimeHour+":0"+smsSendTimeMinutes);
+            }
+        }else {
+            if (smsSendTimeHour<10){
+                txtSettingsTime.setText("0"+smsSendTimeHour+":"+smsSendTimeMinutes);
+            }else{
+                txtSettingsTime.setText(smsSendTimeHour+":"+smsSendTimeMinutes);
+            }
+        }
     }
 
 

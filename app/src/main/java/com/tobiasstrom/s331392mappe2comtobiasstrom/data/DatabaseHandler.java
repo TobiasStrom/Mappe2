@@ -213,11 +213,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Constants.KEY_MEETING_END, meeting.getMeeting_end());
         values.put(Constants.KEY_MEETING_PLACE, meeting.getMeeting_place());
         values.put(Constants.KEY_MEETING_TYPE, meeting.getMeeting_type());
-        Log.e(TAG, "addMeeting: " + meeting.getMeeting_start() );
-        Log.e(TAG, "addMeeting: " + meeting.getMeeting_end() );
-        Log.e(TAG, "addMeeting: " + meeting.getMeeting_place() );
-        Log.e(TAG, "addMeeting: " + meeting.getMeeting_type() );
-        Log.e(TAG, "addMeeting: " + db.insert(Constants.TABLE_MEETING,null, values));
+
+        db.insert(Constants.TABLE_MEETING,null, values);
 
     }
     //Oppdaterer møte med ny informsjon.
