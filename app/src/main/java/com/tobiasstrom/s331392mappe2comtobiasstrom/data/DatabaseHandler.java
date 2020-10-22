@@ -115,6 +115,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.delete(Constants.TABLE_COMBO, Constants.KEY_CONTACTTBL_ID + " =? ", new String[]{String.valueOf(id)});
         //db.close();
     }
+    public List<Integer> getContatcsIdInMeeting(int meetingID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Integer> contactId = new ArrayList<>();
+        //select * from comboTBL where meetingTBL_ID = id;
+        String findPersonInMeeting = "SELECT * FROM "+Constants.TABLE_COMBO+" WHERE " + Constants.KEY_MEETINGTBL_ID+" = "+meetingID+";";
+
+        Cursor cursor = db.rawQuery(findPersonInMeeting, null);
+        if (cursor.moveToFirst()){
+            do {
+                Integer i = cursor.getInt(0);
+                contactId.add(i);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        //db.close();
+        return contactId;
+
+    }
 
     //Oppdatere en kontakt
     public int updateContact(Contact contact){
