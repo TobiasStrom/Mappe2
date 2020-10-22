@@ -12,6 +12,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.material.navigation.NavigationView;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.services.CycleService;
 
 import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
@@ -89,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void startMeetingNotifyService() {
         //denne skal slå på servicen hver gang applikasjonen startes
-       //Intent intent = new Intent(this, CycleService.class);
-        // this.startService(intent);
         int myPermissionsRequestSendSms = ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
 
         if (myPermissionsRequestSendSms != 0) { //sjekker om applikasjonen har permission til å sende sms, hvis ikke så skal det spørs om det
@@ -98,8 +97,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent();
-        intent.setAction("test");
+        intent.setAction("com.tobiasstrom.action.ON_APP_CREATED");
         sendBroadcast(intent);
+        //Intent intent = new Intent(this, CycleService.class);
+        //this.startService(intent);
 
     }
 

@@ -52,9 +52,9 @@ public class SettingsFragment extends Fragment {
         setSmsTime = root.findViewById(R.id.SmsTimeButton);
 
         //hente verdier fra sharedpreferences, dersom de fantes ikke, skal deault verdier plasseres
-        smsServiceIsOn = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getBoolean("smsServiceIsOn", true);
+        smsServiceIsOn = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getBoolean("smsServiceIsOn", false);
         smsMessage = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("smsMessage", "Du er invitert ti et møte");
-        smsSendTimeHour = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getInt("smsSendTimeHour", 8);
+        smsSendTimeHour = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getInt("smsSendTimeHour", 0);
         smsSendTimeMinutes = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getInt("smsSendTimeMinutes", 0);
 
         //justere elementer på grensesnittet ut av verdier hentet fra sharedpreferences

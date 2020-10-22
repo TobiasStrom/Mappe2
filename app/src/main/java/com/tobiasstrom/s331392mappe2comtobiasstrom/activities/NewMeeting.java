@@ -111,7 +111,7 @@ public class NewMeeting extends AppCompatActivity {
             txtInputType.setText(newMeetingType);
             toolbar.setTitle(getText(R.string.editMeeting));
             try {
-                dateStart=new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(newMeetingStart);
+                dateStart = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(newMeetingStart);
                 dateStartFormat = dateFormat.format(dateStart.getTime());
                 timeStartFormat = timeFormat.format(dateStart.getTime());
                 txtTimeStart.setText(timeStartFormat);
@@ -120,7 +120,7 @@ public class NewMeeting extends AppCompatActivity {
                 e.printStackTrace();
             }
             try {
-                dateEnd=new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(newMeetingEnd);
+                dateEnd = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(newMeetingEnd);
                 dateEndFormat = dateFormat.format(dateEnd.getTime());
                 timeEndFormat = timeFormat.format(dateEnd.getTime());
                 txtTimeEnd.setText(timeEndFormat);
@@ -133,7 +133,7 @@ public class NewMeeting extends AppCompatActivity {
         }else {
             newMeeting = true;
             date= new Date();
-          //id = db.getMeetingCount()+1; //skapes en id som skal være det samme som sql vil lage
+            //id = db.getMeetingCount()+1; //skapes en id som skal være det samme som sql vil lage
       
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);

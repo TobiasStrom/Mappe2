@@ -54,5 +54,4 @@
     <string name="setSmsTime">Velg tiden sms sendes</string>
     <string name="smsMessage">Skriv sms melding</string>
     <string name="smsService">Send sms til deltagere</string>
-
 </resources>
