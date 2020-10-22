@@ -30,6 +30,7 @@ import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsRecyclerViewAdapter;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.contacts.ContactsFragment;
+import com.tobiasstrom.s331392mappe2comtobiasstrom.util.Constants;
 
 
 import java.util.List;
@@ -37,11 +38,9 @@ import java.util.List;
 public class NewContact extends AppCompatActivity {
     private static final String TAG = "NewContact";
 
-    private List<Contact> contactsList;
-    private List<Contact> listContact;
+    //Oppretter verdien somo skan burkes.
     private DatabaseHandler db;
     private ActionBar toolbar;
-    private TextInputLayout errFirstName;
     private EditText editFirstName;
     private EditText editLastName;
     private EditText editEmail;
@@ -59,18 +58,14 @@ public class NewContact extends AppCompatActivity {
         outMessege = "";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_contact);
-        /*
-        toolbar = (Toolbar) findViewById(R.id.toolbarNewContact);
-        toolbar.setTitle("hei");
-        setActionBar(toolbar);
-
-
-         */
+        //Oppretter en toolbar
         toolbar = getSupportActionBar();
         toolbar.setTitle(getText(R.string.newCntact));
 
+        //Oppretter en databaseHandler
         db = new DatabaseHandler(this);
 
+        //Henter verdien vi trenger.
         editFirstName = findViewById(R.id.editFirstName);
         editLastName = findViewById(R.id.editLastName);
         editEmail = findViewById(R.id.editEmail);
@@ -83,13 +78,11 @@ public class NewContact extends AppCompatActivity {
         txtErrorLastNameNewContact.setVisibility(View.INVISIBLE);
         txtErrorMailNewContact.setVisibility(View.INVISIBLE);
         txtErrorPhonenumberNewContact.setVisibility(View.INVISIBLE);
-
-
     }
-
+    //Lager oppretter en kontakt med verdien som er sattet og lagrer dem i db
     private void saveContactToDB(){
+        Constants.changeContact = true;
         Contact contact = new Contact();
-
         String newFistName = editFirstName.getText().toString();
         String newLastName = editLastName.getText().toString();
         String newEmail = editEmail.getText().toString();
@@ -103,38 +96,32 @@ public class NewContact extends AppCompatActivity {
         db.addContacts(contact);
 
     }
-
+    //Oppretter toolbaren
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.contact_menu, menu);
         return true;
     }
-
+    //Når du trykker på lagre kontakt
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         outMessege = "";
-        Log.e(TAG, "onOptionsItemSelected: trykket " );
-        wrongInput();
-        if(inputValidation){
+        //Skjekker om det er riktig input
+        if(wrongInput()){
+            //lagrer i db
             saveContactToDB();
             finish();
         }
         return super.onOptionsItemSelected(item);
     }
-    /*
-    private void restartActivity(){
-        Intent i = new Intent(getActivity(), PreferanseActivity.class);
-        startActivity(i);
-        getActivity().finish();
-    }
-
-     */
-
-
-    public void wrongInput(){
+    //Skjekker input.
+    public boolean wrongInput(){
+        //Starter med en verdis er true som betyr at det ikke en noe endring.
         inputValidation = true;
+        //Teksen som skal skrives i info til brukere.
         outMessege = "";
+        //Skjekker om noen av feltene er tomme og hvis de er det endrer den inputValidation til false og skriver ut en toast
         if(editFirstName.getText().toString().isEmpty() || editLastName.getText().toString().isEmpty() ||
                 editEmail.getText().toString().isEmpty() || editPhoneNumber.getText().toString().isEmpty()){
             outMessege += getText(R.string.emtyField);
@@ -143,8 +130,8 @@ public class NewContact extends AppCompatActivity {
             int duration = Toast.LENGTH_LONG;
             Toast toast = Toast.makeText(context, outMessege, duration);
             toast.show();
-
         }
+        //Finner ut om fornavn har bare verdier som er godkjente og skriver ut melding hvis ikke.
         if (!editFirstName.getText().toString().matches("[a-zøæåA-ZÆØÅ_]+")) {
             txtErrorFirstnameNewContact.setVisibility(View.VISIBLE);
             txtErrorFirstnameNewContact.setText(getText(R.string.wrongName));
@@ -153,6 +140,7 @@ public class NewContact extends AppCompatActivity {
         else {
             txtErrorFirstnameNewContact.setVisibility(View.INVISIBLE);
         }
+        //Finner ut om etternavn har bare verdier som er godkjente og skriver ut melding hvis ikke.
         if (!editLastName.getText().toString().matches("[a-zøæåA-ZÆØÅ_]+")) {
             txtErrorLastNameNewContact.setText(getText(R.string.wrongNameLast));
             txtErrorLastNameNewContact.setVisibility(View.VISIBLE);
@@ -161,6 +149,7 @@ public class NewContact extends AppCompatActivity {
         else {
             txtErrorLastNameNewContact.setVisibility(View.INVISIBLE);
         }
+        //Finner ut om telefonummner har bare verdier som er godkjente og skriver ut melding hvis ikke.
         if (!editPhoneNumber.getText().toString().matches("[0-9+]+")) {
             txtErrorPhonenumberNewContact.setText(getText(R.string.wrongPhonenumber));
             txtErrorPhonenumberNewContact.setVisibility(View.VISIBLE);
@@ -169,6 +158,7 @@ public class NewContact extends AppCompatActivity {
         }else {
             txtErrorPhonenumberNewContact.setVisibility(View.INVISIBLE);
         }
+        //Finner ut om lengden på telefonmunneret passer med det som er bestemt.
         if (editPhoneNumber.getText().toString().length() == 8 || editPhoneNumber.getText().toString().length() == 11 || editPhoneNumber.getText().toString().length() == 12) {
             txtErrorPhonenumberNewContact.setVisibility(View.INVISIBLE);
         }else{
@@ -177,6 +167,7 @@ public class NewContact extends AppCompatActivity {
             Log.e(TAG, "wrongInput: " + editPhoneNumber.getText().toString().length() );
             inputValidation = false;
         }
+        //Finner ut om email har bare verdier som er godkjente og skriver ut melding hvis ikke.
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         if (!editEmail.getText().toString().matches(regex)) {
             txtErrorMailNewContact.setText(getText(R.string.wrongEmailFormat));
@@ -187,6 +178,8 @@ public class NewContact extends AppCompatActivity {
         else {
             txtErrorMailNewContact.setVisibility(View.INVISIBLE);
         }
+        return inputValidation;
     }
+
 
 }

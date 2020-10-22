@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -27,18 +28,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public DatabaseHandler(Context context) {
         super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
     }
-
+    //Bruker ikke onCreate eller on Upgrade da disse er lagret i ContentProviderHandler
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
 
-    //add Contact
+    //Legger til en kontakt
     public void addContacts(Contact contact){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -51,8 +51,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert(Constants.TABLE_CONTACT, null, values);
         //db.close();
     }
+    //Henter ut en kontakt med id.
+    public Contact getAContact(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(Constants.TABLE_CONTACT, new String[]{Constants.KEY_CONTACT_ID, Constants.KEY_CONTACT_FIRSTNAME, Constants.KEY_CONTACT_LASTNAME, Constants.KEY_CONTACT_PHONENUMBER, Constants.KEY_CONTACT_EMAIL},
+                Constants.KEY_CONTACT_ID+ "=?",
+                new String[]{String.valueOf(id)},null,null,null,null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+            Contact contact = new Contact();
+            contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_ID))));
+            contact.setFirstName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_FIRSTNAME)));
+            contact.setLastName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_LASTNAME)));
+            contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_PHONENUMBER)));
+            contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));
 
-    //get all contacts
+        return contact;
+    }
+
+    //Henter en liste med alle kontaktene.
     public List<Contact> getAllContacts(){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -77,7 +95,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return contactList;
     }
 
-    //get contacts
+    //TODO: Tenges nok ikke
+    //Henter ut antall kontakter som brukers til å srive ut
     public int getContactCount(){
         String countQuery = "SELECT * FROM " + Constants.TABLE_CONTACT;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -88,7 +107,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return i;
     }
 
-    //delete item
+    //Slette en kontakt
     public void deleteContact(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         //slettes rekord fra kontakter tabell
@@ -98,7 +117,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //db.close();
     }
 
-    //update contact
+    //Oppdatere en kontakt
     public int updateContact(Contact contact){
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -111,7 +130,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return db.update(Constants.TABLE_CONTACT, values, Constants.KEY_CONTACT_ID + " =?" , new String[]{String.valueOf(contact.getContactId())});
     }
 
-    //get all meeting
+    //Hente alle møtene
     public List<Meeting> getAllMeetings(){
         SQLiteDatabase db = this.getReadableDatabase();
         List<Meeting> meetingList = new ArrayList<>();
@@ -138,7 +157,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return meetingList;
     }
 
-    //get meetings count
+    //Henter antall møter.
     public int getMeetingCount(){
         String countQuery = "SELECT count(*) MeetingCount FROM " + Constants.TABLE_MEETING+";";
 
@@ -153,13 +172,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //db.close();
         return ant;
     }
-
+    //Sletter en kontakt fra et møte
     public void deleteContactsFromMeeting(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(Constants.TABLE_COMBO, Constants.KEY_MEETINGTBL_ID + " =? ", new String[]{String.valueOf(id)});
         //db.close();
     }
-    //delete meeting
+    //Sletter møte
     public void deleteMeeting(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         //slettes rekord fra møte tabell
@@ -167,7 +186,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //slettes rekord fra combo tabell
         db.delete(Constants.TABLE_COMBO, Constants.KEY_MEETINGTBL_ID + " =? ", new String[]{String.valueOf(id)});
     }
-
+    //Legger til møte
     public void addMeeting(Meeting meeting){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -182,9 +201,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Log.e(TAG, "addMeeting: " + meeting.getMeeting_type() );
         Log.e(TAG, "addMeeting: " + db.insert(Constants.TABLE_MEETING,null, values));
 
-        //db.close();
     }
-
+    //Oppdaterer møte med ny informsjon.
     public int updateMeeting(Meeting meeting){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -197,7 +215,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //db.close();
         return i;
     }
-
+    //Henter ut siste møte får å kunne sette id på møte
     public Meeting getLastMeeting() {
         SQLiteDatabase db = this.getReadableDatabase();
         String sqlquerry = "Select * FROM " + Constants.TABLE_MEETING + " ORDER BY " + Constants.KEY_MEETING_ID + " DESC limit 1;";
@@ -209,17 +227,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return meeting;
     }
 
+    //Legger til en kontakt i møte
     public void addContactToMeeting(int meetingID, int contactID){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(Constants.KEY_CONTACTTBL_ID, contactID);
         values.put(Constants.KEY_MEETINGTBL_ID, meetingID);
-
-        db.insert(Constants.TABLE_COMBO, null, values);
-        //db.close();
+        try {
+            db.insert(Constants.TABLE_COMBO, null, values);
+        } catch (SQLiteConstraintException e) {
+            e.printStackTrace();
+        }
     }
-
+    //Henter ut id til kontaktene i møte.
     public List<Integer> getContatctIdInMeeting(int meetingID) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Integer> contactId = new ArrayList<>();
@@ -235,11 +256,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        //db.close();
         return contactId;
 
     }
-
+    //Henter ut kontakten i møte med en spellsile id.
     public List<Contact> getContactInMeeting(int meetingID){
         SQLiteDatabase db = this.getReadableDatabase();
         List<Contact> contactsList = new ArrayList<>();
@@ -256,31 +276,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 contact.setLastName(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_LASTNAME)));
                 contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_PHONENUMBER)));
                 contact.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_CONTACT_EMAIL)));
-
+                contactsList.add(contact);
 
             }while (cursor.moveToNext());
         }
         cursor.close();
-        //db.close();
-        return contactsList;
-        //select customerTBL.customer_firsname from customerTBl cross join comboTBL on customerTBL.id = comboTBL.customerTBl_id  where comboTBL.meetingTBL_id =1;
-    }
 
+        return contactsList;
+
+    }
+    //Finner ut hvilke kontakter som ikke er i møte
     public List<Contact> getContactNotInMeeting(int meetingID){ // NOTE: denne metoden virker men resultatet blir ikke fulstending riktig.
         SQLiteDatabase db = this.getReadableDatabase();
         List<Contact> contactsList = new ArrayList<>();
-        /*String findPersonInMeeting = "SELECT *" +
-                " FROM "+ Constants.TABLE_CONTACT + " CROSS JOIN " + Constants.TABLE_COMBO + " ON "+ Constants.TABLE_CONTACT+"."+ Constants.KEY_CONTACT_ID + " = "+ Constants.TABLE_COMBO + "." + Constants.KEY_CONTACTTBL_ID +
-                " WHERE "+ Constants.TABLE_COMBO+ "."+ Constants.KEY_MEETINGTBL_ID + " = " + meetingID + ";";*/
-
-        //select * from customerTBL left join comboTBL on customerTBL.id = comboTBL.customerTBL_id where comboTBL.meetingTBL_ID != 1 or comboTBL.meetingTBL_ID is null;
         String findPersonInMeeting = "SELECT * FROM "+Constants.TABLE_CONTACT +
                 " LEFT JOIN "+Constants.TABLE_COMBO+" ON "+Constants.TABLE_CONTACT+"."+Constants.KEY_CONTACT_ID+" = "+Constants.TABLE_COMBO+"."+Constants.KEY_CONTACTTBL_ID+
                 " WHERE "+Constants.TABLE_COMBO+"."+Constants.KEY_MEETINGTBL_ID+" != "+meetingID+" OR "+Constants.TABLE_COMBO+"."+Constants.KEY_MEETINGTBL_ID+
                 " IS NULL GROUP BY "+Constants.TABLE_CONTACT+"."+Constants.KEY_CONTACT_ID+";";
-
         Cursor cursor = db.rawQuery(findPersonInMeeting, null);
-
         if(cursor.moveToFirst()){
             do {
                 Contact contact = new Contact();
@@ -298,8 +311,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }while (cursor.moveToNext());
         }
         cursor.close();
-        //db.close();
         return contactsList;
-        //select customerTBL.customer_firsname from customerTBl cross join comboTBL on customerTBL.id = comboTBL.customerTBl_id  where comboTBL.meetingTBL_id =1;
+
     }
 }

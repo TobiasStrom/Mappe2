@@ -51,5 +51,8 @@
     <string name="wrong_date">Slutttid må være etter starttid</string>
     <string name="meetingEmty">Du må fylle alle felt</string>
     <string name="add">Legg til</string>
+    <string name="notMeeting">Du kan ikke slette møte som ikke er oppretter</string>
+    <string name="noContact">Du har ingen kontakter</string>
+    <string name="noMeeting">Du har ingen Møter</string>
 
 </resources>

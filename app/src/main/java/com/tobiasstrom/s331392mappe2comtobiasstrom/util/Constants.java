@@ -42,6 +42,7 @@ public class Constants {
         uriMatcher.addURI(PROVIDER, "contact/#", CONTAKT);
     }
 
-
     public static ArrayList<Integer> selectedItems;
+
+    public static boolean changeContact = false;
 }

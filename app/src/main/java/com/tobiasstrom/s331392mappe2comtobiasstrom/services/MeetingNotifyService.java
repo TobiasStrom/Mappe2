@@ -69,7 +69,7 @@ public class MeetingNotifyService extends Service {
         for (Contact contact : contacts) {
                 Log.d(TAG, "sendMessages: I want to send message");
                 SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage("5554",null, "hello", null, null);
+                //smsManager.sendTextMessage("5554",null, "hello", null, null);
         }
     }
 
