@@ -51,7 +51,7 @@ public class MeetingNotifyService extends Service {
         int currentMinutes = Integer.parseInt(minutes.format(calendar.getTime())); // skal gi int med nåværende minutter
 
         // TODO: 22.10.2020 endre slik at den viser notifikasjon kun engang
-        sendNotificationHour = currentHour; //for debugging, slik vil notifikasjonen vises hver gang denne servisen refreshes, det vil si hver minutt
+        //sendNotificationHour = currentHour; //for debugging, slik vil notifikasjonen vises hver gang denne servisen refreshes, det vil si hver minutt
 
 
         if (currentHour == sendNotificationHour) { //it's time to show notification
