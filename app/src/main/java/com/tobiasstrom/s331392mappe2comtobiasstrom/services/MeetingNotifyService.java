@@ -54,7 +54,8 @@ public class MeetingNotifyService extends Service {
         //sendNotificationHour = currentHour; //for debugging, slik vil notifikasjonen vises hver gang denne servisen refreshes, det vil si hver minutt
 
 
-        if (currentHour == sendNotificationHour) { //it's time to show notification
+        //notifikasjonen skal kun sendes en gang i timen det vil si når timen er 7 og minutter er 0
+        if (currentHour == sendNotificationHour && currentMinutes == 0) { //it's time to show notification
             //send notification
             showNotification(calendar);
         }
