@@ -2,9 +2,7 @@ package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import android.content.Intent;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,22 +16,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.data.DatabaseHandler;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.model.Contact;
-import com.tobiasstrom.s331392mappe2comtobiasstrom.R;
-import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.ContactsRecyclerViewAdapter;
-import com.tobiasstrom.s331392mappe2comtobiasstrom.ui.contacts.ContactsFragment;
 import com.tobiasstrom.s331392mappe2comtobiasstrom.util.Constants;
-
-
-import java.util.List;
 
 public class NewContact extends AppCompatActivity {
     private static final String TAG = "NewContact";
