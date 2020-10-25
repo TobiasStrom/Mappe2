@@ -1,4 +1,4 @@
-package com.tobiasstrom.s331392mappe2comtobiasstrom.ui.meetings;
+package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
 import android.os.Bundle;
 import android.view.Gravity;

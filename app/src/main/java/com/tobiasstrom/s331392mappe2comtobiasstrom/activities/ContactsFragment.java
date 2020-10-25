@@ -1,4 +1,4 @@
-package com.tobiasstrom.s331392mappe2comtobiasstrom.ui.contacts;
+package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
 import android.content.Context;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.tobiasstrom.s331392mappe2comtobiasstrom.ui.settings;
+package com.tobiasstrom.s331392mappe2comtobiasstrom.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

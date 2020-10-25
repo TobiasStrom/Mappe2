@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_meetings"
-        android:name="com.tobiasstrom.s331392mappe2comtobiasstrom.ui.meetings.MeetingsFragment"
+        android:name="com.tobiasstrom.s331392mappe2comtobiasstrom.activities.MeetingsFragment"
         android:label="@string/menu_meetings"
         tools:layout="@layout/fragment_meetings" />
 
     <fragment
         android:id="@+id/nav_contacts"
-        android:name="com.tobiasstrom.s331392mappe2comtobiasstrom.ui.contacts.ContactsFragment"
+        android:name="com.tobiasstrom.s331392mappe2comtobiasstrom.activities.ContactsFragment"
         android:label="@string/menu_contacts"
         tools:layout="@layout/fragment_contacts" />
     
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.tobiasstrom.s331392mappe2comtobiasstrom.ui.settings.SettingsFragment"
+        android:name="com.tobiasstrom.s331392mappe2comtobiasstrom.activities.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
 
